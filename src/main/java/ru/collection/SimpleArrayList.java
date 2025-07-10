@@ -1,5 +1,5 @@
 package ru.collection;
-
+//
 import java.util.*;
 
 public class SimpleArrayList<T> implements SimpleList<T> {
