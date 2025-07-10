@@ -8,28 +8,21 @@ public class SimpleArrayList<T> implements SimpleList<T> {
     private int modCount;
 
     public SimpleArrayList(int capacity) {
-        if (capacity == 0) {
-            capacity = 1;
-        }
         container = (T[]) new Object[capacity];
-    }
-
-    private void grow() {
-        if (size == container.length) {
-            container = Arrays.copyOf(container, container.length * 2);
-        }
     }
 
     @Override
     public void add(T value) {
+        if (size == container.length) {
+            increaseLength();
+        }
         container[size++] = value;
         modCount++;
-        grow();
     }
 
     @Override
     public T set(int index, T newValue) {
-       Objects.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         T oldValue = container[index];
         container[index] = newValue;
         return oldValue;
@@ -78,6 +71,10 @@ public class SimpleArrayList<T> implements SimpleList<T> {
                 return container[currentIndex++];
             }
         };
+    }
+
+    private void increaseLength() {
+        container = Arrays.copyOf(container, container.length + 1 * 2);
     }
 
 }
