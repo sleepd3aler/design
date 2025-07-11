@@ -48,11 +48,16 @@ public class SimpleArrayList<T> implements SimpleList<T> {
         return size;
     }
 
+    private void increaseLength() {
+        container = container.length == 0 ?
+                Arrays.copyOf(container, 2) : Arrays.copyOf(container, container.length * 2);
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            final int expectedModCount = modCount;
-            int currentIndex = 0;
+            private final int expectedModCount = modCount;
+            private int currentIndex = 0;
 
             @Override
             public boolean hasNext() {
@@ -70,11 +75,6 @@ public class SimpleArrayList<T> implements SimpleList<T> {
                 return container[currentIndex++];
             }
         };
-    }
-
-    private void increaseLength() {
-        container = container.length == 0 ?
-                Arrays.copyOf(container, 2) : Arrays.copyOf(container, container.length * 2);
     }
 
 }
