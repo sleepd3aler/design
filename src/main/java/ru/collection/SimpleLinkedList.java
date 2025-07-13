@@ -8,17 +8,19 @@ public class SimpleLinkedList<E> implements SimpleLinked<E> {
     private int size;
     private int modCount;
     private Node<E> head;
+    private Node<E> tail;
 
     @Override
     public void add(E value) {
+        Node<E> newNode = new Node<>(value, null);
         if (head == null) {
-            head = new Node<>(value, null);
+            head = newNode;
         } else {
-            Node<E> current = head;
-            while (current.next != null) {
-                current = current.next;
+            tail = head;
+            while (tail.next != null) {
+                tail = tail.next;
             }
-            current.next = new Node<>(value, null);
+            tail.next = newNode;
         }
         size++;
         modCount++;
@@ -27,13 +29,11 @@ public class SimpleLinkedList<E> implements SimpleLinked<E> {
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
-        int counter = 0;
-        Node<E> current = head;
-        while (counter < index) {
-            current = current.next;
-            counter++;
+        tail = head;
+        for (int i = 0; i < index; i++) {
+            tail = tail.next;
         }
-        return current.item;
+        return tail.item;
     }
 
     @Override
@@ -44,22 +44,20 @@ public class SimpleLinkedList<E> implements SimpleLinked<E> {
 
             @Override
             public boolean hasNext() {
-                checkModification();
+                if (modCount != expectedModCount) {
+                    throw new ConcurrentModificationException();
+                }
                 return current != null;
             }
 
             @Override
             public E next() {
-                checkModification();
-                E current = this.current.item;
-                this.current = this.current.next;
-                return current;
-            }
-
-            private void checkModification() {
-                if (modCount != expectedModCount) {
-                    throw new ConcurrentModificationException();
+                if (hasNext()) {
+                    E result = current.item;
+                    current = current.next;
+                    return result;
                 }
+                return null;
             }
         };
     }
