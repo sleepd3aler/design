@@ -1,5 +1,5 @@
 package ru.collection;
-
+//
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Objects;
