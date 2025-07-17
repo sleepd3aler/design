@@ -40,6 +40,7 @@ public class ForwardLinked<T> implements Iterable<T> {
         }
         Node<T> deleted = head;
         head = head.next;
+        deleted.next = null;
         size--;
         modCount++;
         return deleted.value;
