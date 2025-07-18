@@ -20,11 +20,12 @@ class ForwardLinkedTest {
     }
 
     @Test
-    public void whenDeleteLastAndAddNewElementThenExpectedResult() {
-        assertThat(list.deleteLast()).isEqualTo(2);
-        assertThat(list).doesNotContain(2);
-        list.add(3);
-        assertThat(list.get(1)).isEqualTo(3);
+    void whenAddFirstThenSecondBecomesFirst() {
+        list.addFirst(3);
+        assertThat(list.get(0)).isEqualTo(3);
+        assertThat(list.get(1)).isEqualTo(1);
+        assertThat(list.get(2)).isEqualTo(2);
+
     }
 
     @Test
