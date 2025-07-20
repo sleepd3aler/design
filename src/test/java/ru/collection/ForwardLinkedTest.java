@@ -1,12 +1,13 @@
 package ru.collection;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ForwardLinkedTest {
 
@@ -25,7 +26,31 @@ class ForwardLinkedTest {
         assertThat(list.get(0)).isEqualTo(3);
         assertThat(list.get(1)).isEqualTo(1);
         assertThat(list.get(2)).isEqualTo(2);
+    }
 
+    @Test
+    void whenAddFirstThenListContainsAllElementsAndInSameOrder() {
+        list.addFirst(3);
+        assertThat(list).containsExactlyInAnyOrder(3, 1, 2);
+        assertThat(list).hasSize(3);
+    }
+
+    @Test
+    void whenAddFirstInEmptyListContainsAllElementsAndInSameOrder() {
+        list = new ForwardLinked<>();
+        list.addFirst(3);
+        list.add(1);
+        list.addFirst(4);
+        assertThat(list).containsExactlyInAnyOrder(4, 3, 1);
+        assertThat(list).hasSize(3);
+    }
+
+    @Test
+    void whenAddFirstToEmptyListDoesNotContainNullElement() {
+        list = new ForwardLinked<>();
+        list.addFirst(3);
+        assertThat(list).hasSize(1);
+        assertThat(list.get(0)).isEqualTo(3);
     }
 
     @Test
