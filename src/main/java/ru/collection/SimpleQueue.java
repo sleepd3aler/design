@@ -7,13 +7,13 @@ public class SimpleQueue<T> {
     private final SimpleStack<T> output = new SimpleStack<>();
 
     public T poll() {
+        if (output.isEmpty() && input.isEmpty()) {
+            throw new NoSuchElementException("Queue is empty");
+        }
         if (output.isEmpty()) {
             while (!input.isEmpty()) {
                 output.push(input.pop());
             }
-        }
-        if (output.isEmpty()) {
-            throw new NoSuchElementException("Queue is empty");
         }
         return output.pop();
     }
