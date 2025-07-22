@@ -9,15 +9,14 @@ public class SimpleQueue<T> {
 
     public T poll() {
         checkSize();
-        try {
-            T deleted = output.pop();
+        if (output.isEmpty()) {
             size--;
-            return deleted;
-        } catch (NoSuchElementException e) {
-            for (int i = 0; i < size; i++) {
-                output.push(input.pop());
-            }
+            return output.pop();
         }
+        for (int i = 0; i < size; i++) {
+            output.push(input.pop());
+        }
+
         size--;
         return output.pop();
     }
