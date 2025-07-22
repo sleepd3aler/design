@@ -16,7 +16,6 @@ public class SimpleQueue<T> {
         for (int i = 0; i < size; i++) {
             output.push(input.pop());
         }
-
         size--;
         return output.pop();
     }
@@ -27,7 +26,7 @@ public class SimpleQueue<T> {
     }
 
     private void checkSize() {
-        if (size == 0) {
+        if (input.isEmpty()) {
             throw new NoSuchElementException("Queue is empty");
         }
     }
