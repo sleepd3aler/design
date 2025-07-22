@@ -11,7 +11,7 @@ public class SimpleStack<T> {
        linked.addFirst(value);
     }
 
-    public boolean isNotEmpty() {
-       return linked.iterator().hasNext();
+    public boolean isEmpty() {
+       return !linked.iterator().hasNext();
     }
 }

@@ -9,7 +9,7 @@ public class SimpleQueue<T> {
 
     public T poll() {
         checkSize();
-        if (output.isNotEmpty()) {
+        if (!output.isEmpty()) {
             size--;
             return output.pop();
         }
