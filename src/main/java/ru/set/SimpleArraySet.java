@@ -1,8 +1,8 @@
 package ru.set;
 
-import ru.collection.SimpleArrayList;
-
 import java.util.Iterator;
+import java.util.Objects;
+import ru.collection.SimpleArrayList;
 
 public class SimpleArraySet<T> implements SimpleSet<T> {
 
@@ -20,7 +20,7 @@ public class SimpleArraySet<T> implements SimpleSet<T> {
     @Override
     public boolean contains(T value) {
         for (T t : set) {
-            if (t.equals(value)) {
+            if (Objects.equals(t, value)) {
                 return true;
             }
         }

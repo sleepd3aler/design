@@ -69,7 +69,7 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
             @Override
             public T next() {
-                if (!hasNext() || currentIndex < size && container[currentIndex] == null) {
+                if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
                 return container[currentIndex++];
