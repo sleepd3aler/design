@@ -21,8 +21,9 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         if ((float) count / capacity >= LOAD_FACTOR) {
             expand();
         }
-        if (isEmpty(key)) {
-            table[currentIndex(key)] = new MapEntry<>(key, value);
+        int index = currentIndex(key);
+        if (table[index] == null) {
+            table[index] = new MapEntry<>(key, value);
             count++;
             modCount++;
             return true;
@@ -33,19 +34,21 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     @Override
     public V get(K key) {
         K k = null;
-        if (!isEmpty(key)) {
-            k = table[currentIndex(key)].key;
+        int index = currentIndex(key);
+        if (table[index] != null) {
+            k = table[index].key;
         }
         if (keyHashCode(k) == keyHashCode(key) && Objects.equals(k, key)) {
-            return table[currentIndex(key)].value;
+            return table[index].value;
         }
         return null;
     }
 
     @Override
     public boolean remove(K key) {
-        if (!isEmpty(key)) {
-            table[currentIndex(key)] = null;
+        int index = currentIndex(key);
+        if (table[index] != null) {
+            table[index] = null;
             modCount++;
             count--;
             return true;
@@ -67,10 +70,6 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     private int keyHashCode(K key) {
         return Objects.hashCode(key);
-    }
-
-    private boolean isEmpty(K key) {
-        return table[currentIndex(key)] == null;
     }
 
     private void expand() {
