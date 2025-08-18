@@ -33,27 +33,29 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public V get(K key) {
-        K k = null;
-        int index = currentIndex(key);
-        if (table[index] != null) {
-            k = table[index].key;
-        }
-        if (keyHashCode(k) == keyHashCode(key) && Objects.equals(k, key)) {
-            return table[index].value;
-        }
-        return null;
+        MapEntry<K, V> entry = findEntry(key);
+        return entry == null ? null : entry.value;
     }
 
     @Override
     public boolean remove(K key) {
-        int index = currentIndex(key);
-        if (table[index] != null) {
-            table[index] = null;
+        MapEntry<K, V> toRemove = findEntry(key);
+        if (toRemove != null) {
+            table[currentIndex(key)] = null;
             modCount++;
             count--;
             return true;
         }
         return false;
+    }
+
+    private MapEntry<K, V> findEntry(K key) {
+        int index = currentIndex(key);
+        MapEntry<K, V> result = table[index];
+        if (result != null && (keyHashCode(result.key) == keyHashCode(key) && Objects.equals(result.key, key))) {
+            return result;
+        }
+        return null;
     }
 
     private int currentIndex(K key) {
