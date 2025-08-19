@@ -39,8 +39,8 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public boolean remove(K key) {
-        MapEntry<K, V> toRemove = findEntry(key);
-        if (toRemove != null) {
+        MapEntry<K, V> forRemove = findEntry(key);
+        if (forRemove != null) {
             table[currentIndex(key)] = null;
             modCount++;
             count--;
@@ -88,8 +88,8 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     @Override
     public Iterator<K> iterator() {
         return new Iterator<>() {
-            int index = 0;
-            final int expectedModCount = modCount;
+            private int index = 0;
+            private final int expectedModCount = modCount;
 
             @Override
             public boolean hasNext() {
@@ -98,6 +98,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
                 }
                 for (int i = index; i < capacity; i++) {
                     if (table[i] != null) {
+                        index = i;
                         return true;
                     }
                 }
@@ -106,14 +107,10 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
             @Override
             public K next() {
-                while (hasNext()) {
-                    MapEntry<K, V> entry = table[index];
-                    index++;
-                    if (entry != null) {
-                        return entry.key;
-                    }
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
                 }
-                throw new NoSuchElementException();
+                return table[index++].key;
             }
         };
     }
