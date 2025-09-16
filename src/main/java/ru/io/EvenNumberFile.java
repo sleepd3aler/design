@@ -4,18 +4,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class EvenNumberFile {
-    private static StringBuilder evenOutputBuilder(FileInputStream inputStream) throws IOException {
+    public static String readFile(FileInputStream inputStream) throws IOException {
         StringBuilder text = new StringBuilder();
         int read;
         while ((read = inputStream.read()) != -1) {
             text.append((char) read);
         }
-
-        return text;
+        return text.toString();
     }
 
-    public static void printEvenNumbers(StringBuilder output) {
-        String[] lines = output.toString().split(System.lineSeparator());
+    public static void printEvenNumbers(String numbers) {
+        String[] lines = numbers.split(System.lineSeparator());
         for (String line : lines) {
             if (Integer.parseInt(line) % 2 == 0) {
                 System.out.println("The number: " + line + " is even");
@@ -24,8 +23,8 @@ public class EvenNumberFile {
     }
 
     public static void main(String[] args) {
-        try (FileInputStream input = new FileInputStream("data/even.txt")) {
-           printEvenNumbers(evenOutputBuilder(input));
+        try (FileInputStream inputStream = new FileInputStream("data/even.txt")) {
+            printEvenNumbers(readFile(inputStream));
         } catch (Exception e) {
             e.printStackTrace();
         }
