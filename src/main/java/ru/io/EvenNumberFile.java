@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 public class EvenNumberFile {
     public static String readFile(String path) {
-        Scanner scanner = new Scanner(path);
         StringBuilder text = new StringBuilder();
-        try (FileInputStream input = new FileInputStream(scanner.nextLine())) {
+        try (Scanner scanner = new Scanner(path);
+             FileInputStream input = new FileInputStream(scanner.nextLine())) {
             int read;
             while ((read = input.read()) != -1) {
                 text.append((char) read);
