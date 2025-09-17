@@ -17,20 +17,23 @@ public class EvenNumberFile {
         return text.toString();
     }
 
-    private static boolean isNumberAndEven(char[] chars) {
-        for (char ch : chars) {
-            if (Character.isDigit(ch) && ch % 2 == 0) {
-                return true;
-            }
+    private static int isNumber(String line) {
+        try {
+            return Integer.parseInt(line);
+        } catch (NumberFormatException e) {
+            return -1;
         }
-        return false;
+
+    }
+
+    private static boolean isEven(String line) {
+        return isNumber(line) % 2 == 0;
     }
 
     public static void printEvenNumbers(String numbers) {
         String[] lines = numbers.split(System.lineSeparator());
         for (String line : lines) {
-            char[] chars = line.toCharArray();
-            if (isNumberAndEven(chars)) {
+            if (isEven(line)) {
                 System.out.println("The Number: " + line + " is even");
             }
         }
