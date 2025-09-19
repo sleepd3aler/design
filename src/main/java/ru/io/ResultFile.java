@@ -1,6 +1,8 @@
 package ru.io;
 
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 public class ResultFile {
     public static StringBuilder multiplyTable(int size) {
@@ -16,8 +18,10 @@ public class ResultFile {
     }
 
     public static void main(String[] args) {
-        try (FileOutputStream output = new FileOutputStream("data/dataresult.txt")) {
-            output.write(multiplyTable(10).toString().getBytes());
+        try (PrintWriter output = new PrintWriter(
+                new BufferedOutputStream(
+                        new FileOutputStream("data/result.txt")))) {
+            output.println("Hello, World!");
         } catch (Exception e) {
             e.printStackTrace();
         }

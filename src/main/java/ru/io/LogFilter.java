@@ -1,7 +1,6 @@
 package ru.io;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,8 +27,21 @@ public class LogFilter {
         return Collections.emptyList();
     }
 
+    public void saveTo(String out) {
+        var data = filter();
+        try (PrintWriter output = new PrintWriter(
+                new BufferedOutputStream(
+                        new FileOutputStream(out)
+                )
+        )) {
+            data.forEach(output::println);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         LogFilter logFilter = new LogFilter("data/log.txt");
-        logFilter.filter().forEach(System.out::println);
+        logFilter.saveTo("data/404.txt");
     }
 }
