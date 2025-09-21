@@ -23,6 +23,9 @@ public class Analysis {
                             output.format("%s;%s;%n", start, end);
                         }
                     });
+            if (!start.isEmpty() && this.end.isEmpty()) {
+                output.format("%s%s;", "Server failed and didn't recovered from: ", start);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
