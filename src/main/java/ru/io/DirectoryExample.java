@@ -8,7 +8,7 @@ public class DirectoryExample {
         File directory = new File("src/main/java/ru/io/files/directory");
         directory.mkdirs();
         File target = new File("src/main/java/ru/io/files");
-        File fileOne = new File("src/main/java/ru/io/files/file1.txt");
+        File fileOne = new File("src/main/java/ru/io/files/file2.txt");
         fileOne.createNewFile();
         File fileTwo = new File("src/main/java/ru/io/files/directory/file2.txt");
         fileTwo.createNewFile();

@@ -3,10 +3,9 @@ package ru.io;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
-import java.util.function.Predicate;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
+
 public class PrintFiles implements FileVisitor<Path> {
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
