@@ -1,24 +1,26 @@
 package ru.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 
+import static ru.io.Search.SearchFiles.extension;
+import static ru.io.Search.SearchFiles.root;
+
 public class Search {
 
-    private static Path root;
+    class SearchFiles implements FileVisitor<Path> {
+        static Path root;
 
-    private static String extension = "";
-
-    private class SearchFiles implements FileVisitor<Path> {
+        static String extension = "";
 
         private final Predicate<Path> condition;
 
@@ -63,18 +65,21 @@ public class Search {
     }
 
     public static void validate(String[] args) {
-       if (args.length < 2) {
-           throw new IllegalArgumentException("Not enough arguments for execute. Enter a PATH and FILE_EXTENSION");
-       }
-       if (args[0] == null) {
-           throw new IllegalArgumentException("ROOT is not available");
-       }
-
-       if (args[1] == null) {
-           throw new IllegalArgumentException("FILE_EXTENSION is not available");
-       }
-            Search.root = Path.of(args[0]);
-            Search.extension = args[1];
+        if (args.length < 2) {
+            throw new IllegalArgumentException("Not enough arguments for execute. Enter a PATH and FILE_EXTENSION");
+        }
+        root = Path.of(args[0]);
+        extension = args[1];
+        if (!Files.exists(root)) {
+            throw new IllegalArgumentException("No such directory");
+        }
+        Optional<File> fileWithAvailableExtension =
+                Arrays.stream(Objects.requireNonNull(root.toFile().listFiles()))
+                        .filter(file -> file.getName().endsWith(extension))
+                        .findFirst();
+        if (fileWithAvailableExtension.isEmpty()) {
+            throw new IllegalArgumentException("No such files with current extension");
+        }
     }
 
     public static void main(String[] args) throws IOException {
