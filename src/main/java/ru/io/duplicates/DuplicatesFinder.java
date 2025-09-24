@@ -9,6 +9,6 @@ public class DuplicatesFinder {
         DuplicatesVisitor duplicatesVisitor = new DuplicatesVisitor();
         Files.walkFileTree(Path.of("/Users/h82w8t/Desktop/Projects/design/src/main/java/ru/io/files"),
                 duplicatesVisitor);
-        duplicatesVisitor.printInfo();
+
     }
 }

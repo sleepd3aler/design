@@ -19,6 +19,7 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
         List<Path> duplicatePaths = new ArrayList<>();
         if (file.getFileName().toString().equals(current.getName()) && file.toFile().length() == current.getSize()) {
             duplicatePaths.add(file);
+            printInfo();
         }
         duplicateFiles.put(current, duplicatePaths);
         return super.visitFile(file, attrs);
