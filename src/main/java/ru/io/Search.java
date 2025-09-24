@@ -14,10 +14,15 @@ import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class Search {
 
-    private class SearchFiles implements FileVisitor<Path> {
-        private Predicate<Path> condition;
+    private static Path root;
 
-        private List<Path> paths = new ArrayList<>();
+    private static String extension = "";
+
+    private class SearchFiles implements FileVisitor<Path> {
+
+        private final Predicate<Path> condition;
+
+        private final List<Path> paths = new ArrayList<>();
 
         public SearchFiles(Predicate<Path> condition) {
             this.condition = condition;
@@ -57,9 +62,24 @@ public class Search {
         return searcher.getPaths();
     }
 
+    public static void validate(String[] args) {
+       if (args.length < 2) {
+           throw new IllegalArgumentException("Not enough arguments for execute. Enter a PATH and FILE_EXTENSION");
+       }
+       if (args[0] == null) {
+           throw new IllegalArgumentException("ROOT is not available");
+       }
+
+       if (args[1] == null) {
+           throw new IllegalArgumentException("FILE_EXTENSION is not available");
+       }
+            Search.root = Path.of(args[0]);
+            Search.extension = args[1];
+    }
+
     public static void main(String[] args) throws IOException {
-        Path test = Path.of(".");
+        validate(args);
         Search search = new Search();
-        search.search(test, file -> file.toFile().getName().endsWith(".html")).forEach(System.out::println);
+        search.search(root, file -> file.toFile().getName().endsWith(extension)).forEach(System.out::println);
     }
 }
