@@ -45,10 +45,9 @@ public class Search {
     public static void main(String[] args) throws IOException {
         validate(args);
         Search search = new Search(Path.of(args[0]), args[1]);
-        search.search(search.getRoot(), new SearchFiles(
-                        file -> file.toFile()
-                                .getName()
-                                .endsWith(search.getExtension())))
-                .forEach(System.out::println);
+        SearchFiles searcher = new SearchFiles(file -> file.toFile()
+                .getName()
+                .endsWith(search.getExtension()));
+        search.search(search.getRoot(), searcher).forEach(System.out::println);
     }
 }
