@@ -12,15 +12,24 @@ import java.util.function.Predicate;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 
-import static ru.io.Search.SearchFiles.extension;
-import static ru.io.Search.SearchFiles.root;
-
 public class Search {
+    private Path root;
+    private String extension;
+
+    public Search(Path root, String extension) {
+        this.root = root;
+        this.extension = extension;
+    }
+
+    public Path getRoot() {
+        return root;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
 
     class SearchFiles implements FileVisitor<Path> {
-        static Path root;
-
-        static String extension = "";
 
         private final Predicate<Path> condition;
 
@@ -71,16 +80,18 @@ public class Search {
         if (args.length < 2) {
             throw new IllegalArgumentException("Not enough arguments for execute. Enter a PATH and FILE_EXTENSION");
         }
-        root = Path.of(args[0]);
-        extension = args[1];
-        if (!Files.exists(root)) {
+        if (!Files.exists(Path.of(args[0])) && !Files.isDirectory(Path.of(args[0]))) {
             throw new IllegalArgumentException("No such directory");
+        }
+        if (!args[1].startsWith(".")) {
+            throw new IllegalArgumentException("Illegal extension format");
         }
     }
 
     public static void main(String[] args) throws IOException {
         validate(args);
-        Search search = new Search();
-        search.search(root, file -> file.toFile().getName().endsWith(extension)).forEach(System.out::println);
+        Search search = new Search(Path.of(args[0]), args[1]);
+        search.search(search.getRoot(), file -> file.toFile().getName()
+                .endsWith(search.getExtension())).forEach(System.out::println);
     }
 }
