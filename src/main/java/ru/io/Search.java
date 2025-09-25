@@ -1,13 +1,13 @@
 package ru.io;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
@@ -61,6 +61,9 @@ public class Search {
     public List<Path> search(Path root, Predicate<Path> condition) throws IOException {
         SearchFiles searcher = new SearchFiles(condition);
         Files.walkFileTree(root, searcher);
+        if (searcher.getPaths().isEmpty()) {
+            throw new IllegalArgumentException("No such files with current extension");
+        }
         return searcher.getPaths();
     }
 
@@ -72,13 +75,6 @@ public class Search {
         extension = args[1];
         if (!Files.exists(root)) {
             throw new IllegalArgumentException("No such directory");
-        }
-        Optional<File> fileWithAvailableExtension =
-                Arrays.stream(Objects.requireNonNull(root.toFile().listFiles()))
-                        .filter(file -> file.getName().endsWith(extension))
-                        .findFirst();
-        if (fileWithAvailableExtension.isEmpty()) {
-            throw new IllegalArgumentException("No such files with current extension");
         }
     }
 
