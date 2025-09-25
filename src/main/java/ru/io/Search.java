@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class Search {
     private Path root;
@@ -23,8 +22,7 @@ public class Search {
         return extension;
     }
 
-    public List<Path> search(Path root, Predicate<Path> condition) throws IOException {
-        SearchFiles searcher = new SearchFiles(condition);
+    public List<Path> search(Path root, SearchFiles searcher) throws IOException {
         Files.walkFileTree(root, searcher);
         if (searcher.getPaths().isEmpty()) {
             throw new IllegalArgumentException("No such files with current extension");
@@ -47,7 +45,10 @@ public class Search {
     public static void main(String[] args) throws IOException {
         validate(args);
         Search search = new Search(Path.of(args[0]), args[1]);
-        search.search(search.getRoot(), file -> file.toFile().getName()
-                .endsWith(search.getExtension())).forEach(System.out::println);
+        search.search(search.getRoot(), new SearchFiles(
+                        file -> file.toFile()
+                                .getName()
+                                .endsWith(search.getExtension())))
+                .forEach(System.out::println);
     }
 }
