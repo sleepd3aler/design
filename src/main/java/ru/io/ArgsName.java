@@ -13,10 +13,6 @@ public class ArgsName {
         }
         return result;
     }
-    //-out=project.zip -encoding=UTF-8
-    //-Xmx=512 request=?msg=Exit=
-    //-Xmx=512 -request?msgHello
-    //"-Xmx=512", "-=?msg=Exit="
 
     private void parse(String[] args) {
         if (args.length == 0) {
