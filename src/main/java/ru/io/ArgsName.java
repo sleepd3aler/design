@@ -7,11 +7,14 @@ public class ArgsName {
     private final Map<String, String> values = new HashMap<>();
 
     public String get(String key) {
-        String result = values.get(key);
-        if (result == null) {
+        validateKey(key);
+        return values.get(key);
+    }
+
+    private void validateKey(String key) {
+        if (!values.containsKey(key)) {
             throw new IllegalArgumentException("This key: '" + key + "' is missing");
         }
-        return result;
     }
 
     private void parse(String[] args) {
