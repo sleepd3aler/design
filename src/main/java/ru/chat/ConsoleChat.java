@@ -19,32 +19,33 @@ public class ConsoleChat {
     }
 
     public void run() {
-        Scanner scanner = new Scanner(System.in);
-        List<String> answers = readPhrases();
-        List<String> dialogue = new ArrayList<>();
-        boolean activeBot = true;
-        boolean needAnswer = true;
-        while (activeBot) {
-            String userMsg = scanner.nextLine();
-            String answer = randomString(answers);
-            dialogue.add(userMsg);
-            if (userMsg.equals(OUT)) {
-                activeBot = false;
+        try (Scanner scanner = new Scanner(System.in)) {
+            List<String> answers = readPhrases();
+            List<String> dialogue = new ArrayList<>();
+            boolean activeBot = true;
+            boolean needAnswer = true;
+            while (activeBot) {
+                String userMsg = scanner.nextLine();
+                dialogue.add(userMsg);
+                if (userMsg.equals(OUT)) {
+                    activeBot = false;
+                }
+                if (userMsg.equals(STOP)) {
+                    needAnswer = false;
+                }
+                if (userMsg.equals(CONTINUE)) {
+                    String answer = randomString(answers);
+                    System.out.println(answer);
+                    dialogue.add(answer);
+                }
+                if (needAnswer) {
+                    String answer = randomString(answers);
+                    System.out.println(answer);
+                    dialogue.add(answer);
+                }
             }
-            if (userMsg.equals(STOP)) {
-                needAnswer = false;
-            }
-            if (userMsg.equals(CONTINUE)) {
-                System.out.println(answer);
-                dialogue.add(answer);
-            }
-            if (needAnswer) {
-                System.out.println(answer);
-                dialogue.add(answer);
-            }
+            saveLog(dialogue);
         }
-        scanner.close();
-        saveLog(dialogue);
     }
 
     List<String> readPhrases() {
