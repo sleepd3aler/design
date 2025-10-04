@@ -43,6 +43,7 @@ public class ConsoleChat {
                 dialogue.add(answer);
             }
         }
+        scanner.close();
         saveLog(dialogue);
     }
 
