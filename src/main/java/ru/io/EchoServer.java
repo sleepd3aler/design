@@ -6,8 +6,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.function.Predicate;
 
 public class EchoServer {
+    private static String cutMsg(Predicate<String> condition, String question) {
+        if (condition.test(question)) {
+            String[] parts = question.split("/");
+            return parts[1].replace(" HTTP", "").substring(parts[1].indexOf('=') + 1);
+        }
+        return null;
+    }
+
     public static void main(String[] args) throws IOException {
         try (ServerSocket server = new ServerSocket(9000)) {
             while (!server.isClosed()) {
@@ -20,9 +29,13 @@ public class EchoServer {
                     output.write("HTTP/1.1 200 OK \r\n\r\n".getBytes());
                     for (String string = input.readLine(); string != null
                             && !string.isEmpty(); string = input.readLine()) {
-                        System.out.println(string);
-                        if (string.contains("Bye")) {
-                            server.close();
+                        String msg = cutMsg(line -> line.startsWith("GET"), string);
+                        if (msg != null) {
+                            if (msg.equals("Exit")) {
+                                server.close();
+                            } else {
+                                output.write(msg.getBytes());
+                            }
                         }
                     }
                     output.flush();
