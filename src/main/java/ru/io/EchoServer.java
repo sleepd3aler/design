@@ -7,8 +7,12 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.function.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EchoServer {
+    private static final Logger LOG = LoggerFactory.getLogger(EchoServer.class.getName());
+
     private static String cutMsg(Predicate<String> condition, String question) {
         if (condition.test(question)) {
             String[] parts = question.split("/");
@@ -17,7 +21,7 @@ public class EchoServer {
         return null;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(9000)) {
             while (!server.isClosed()) {
                 Socket socket = server.accept();
@@ -41,6 +45,8 @@ public class EchoServer {
                     output.flush();
                 }
             }
+        } catch (IOException e) {
+            LOG.error("Input Exception : ", e);
         }
     }
 }

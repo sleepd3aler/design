@@ -20,5 +20,12 @@ private static final Logger LOG = LoggerFactory.getLogger(UsageLog4j.class.getNa
       boolean eighth = true;
       LOG.debug("First : {}; Second : {}, Third : {}, Forth : {}, Fifth : {}, Sixth : {}, Seventh : {}, Eighth : {}",
               first, second, third, forth, fifth, sixth, seventh, eighth);
+
+      try {
+        throw  new Exception("Not Supported code");
+      } catch (Exception e) {
+        LOG.error("Exception in log example", e);
+        LOG.error("User : {}", "Ivan");
+      }
     }
 }
