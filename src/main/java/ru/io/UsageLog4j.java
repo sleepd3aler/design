@@ -7,10 +7,18 @@ public class UsageLog4j {
 private static final Logger LOG = LoggerFactory.getLogger(UsageLog4j.class.getName());
 
     public static void main(String[] args) {
-        LOG.trace("trace message");
-        LOG.debug("debug message");
-        LOG.info("info message");
-        LOG.warn("warn message");
-        LOG.error("error message");
+      String name = "Ivan Ivanov";
+      int age = 33;
+      LOG.debug("User info name : {}, age : {}", name, age);
+      byte first = 1;
+      short second = 2;
+      int third = 3;
+      long forth = 4L;
+      float fifth = 5f;
+      double sixth = 6;
+      char seventh = 7;
+      boolean eighth = true;
+      LOG.debug("First : {}; Second : {}, Third : {}, Forth : {}, Fifth : {}, Sixth : {}, Seventh : {}, Eighth : {}",
+              first, second, third, forth, fifth, sixth, seventh, eighth);
     }
 }
