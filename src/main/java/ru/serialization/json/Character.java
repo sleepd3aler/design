@@ -1,6 +1,7 @@
 package ru.serialization.json;
 
 import java.util.Arrays;
+import org.json.JSONObject;
 
 public class Character {
     private final boolean online;
@@ -17,6 +18,26 @@ public class Character {
         this.friends = friends;
     }
 
+    public boolean isOnline() {
+        return online;
+    }
+
+    public int getLvl() {
+        return lvl;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public String[] getFriends() {
+        return friends;
+    }
+
     @Override
     public String toString() {
         return "Character{" +
@@ -26,5 +47,15 @@ public class Character {
                 ", pet=" + pet +
                 ", friends=" + Arrays.toString(friends) +
                 '}';
+    }
+
+    public static void main(String[] args) {
+        final Character character = new Character(
+                true, 150, "DrocheSlav", new Pet("Evil Devil"), new String[]
+                {"Ivan777", "LeroooyJenkins"}
+        );
+        JSONObject jsonCharacter = new JSONObject(character);
+        String res = jsonCharacter.toString();
+
     }
 }
