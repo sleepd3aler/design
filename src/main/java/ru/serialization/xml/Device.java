@@ -1,13 +1,25 @@
 package ru.serialization.xml;
 
+import jakarta.xml.bind.annotation.*;
 import java.util.Arrays;
 
+@XmlRootElement(name = "device")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Device {
-    private final boolean inOrder;
-    private final int price;
-    private final String name;
-    private final Seller seller;
-    private final String[] potentialBuyers;
+    @XmlAttribute
+    private boolean inOrder;
+    @XmlAttribute
+    private int price;
+    @XmlAttribute
+    private String name;
+    private Seller seller;
+
+    @XmlElementWrapper(name = "potentialbuyers")
+    @XmlElement(name = "potentialbuyer")
+    private String[] potentialBuyers;
+
+    public Device() {
+    }
 
     public Device(boolean inOrder, int price, String name, Seller seller, String[] buyers) {
         this.inOrder = inOrder;
