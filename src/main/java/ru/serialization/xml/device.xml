@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<device inOrder="false" price="18000" name="MacBook Air 2020(Intel i3)">
+    <seller phone="89783358791"/>
+    <potentialbuyers>
+        <potentialbuyer>89787123313</potentialbuyer>
+        <potentialbuyer>89788133712</potentialbuyer>
+    </potentialbuyers>
+</device>
