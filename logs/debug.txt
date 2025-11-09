@@ -1,0 +1,20 @@
+2025-10-25 10:47:08,088 DEBUG ru.io.UsageLog4j:main:12 - User info name : Ivan Ivanov, age : 33
+2025-10-25 10:47:08,090 DEBUG ru.io.UsageLog4j:main:21 - First : 1; Second : 2, Third : 3, Forth : 4, Fifth : 5.0, Sixth : 6.0, Seventh : , Eighth : true
+2025-10-25 10:47:08,090 ERROR ru.io.UsageLog4j:main:27 - Exception in log example
+java.lang.Exception: Not Supported code
+	at ru.io.UsageLog4j.main(UsageLog4j.java:25)
+2025-10-25 10:47:08,091 ERROR ru.io.UsageLog4j:main:28 - User : Ivan
+2025-10-25 10:47:30,708 DEBUG ru.io.UsageLog4j:main:12 - User info name : Ivan Ivanov, age : 33
+2025-10-25 10:47:30,710 DEBUG ru.io.UsageLog4j:main:21 - First : 1; Second : 2, Third : 3, Forth : 4, Fifth : 5.0, Sixth : 6.0, Seventh : , Eighth : true
+2025-10-25 10:47:30,710 ERROR ru.io.UsageLog4j:main:27 - Exception in log example
+java.lang.Exception: Not Supported code
+	at ru.io.UsageLog4j.main(UsageLog4j.java:25)
+2025-10-25 10:47:30,711 ERROR ru.io.UsageLog4j:main:28 - User : Ivan
+2025-10-25 11:45:53,178 DEBUG ru.io.UsageLog4j:main:31 - debug message
+2025-10-25 11:45:53,183  INFO ru.io.UsageLog4j:main:32 - info message
+2025-10-25 11:45:53,183  WARN ru.io.UsageLog4j:main:33 - warn message
+2025-10-25 11:45:53,183 ERROR ru.io.UsageLog4j:main:34 - error message
+2025-10-25 11:46:51,225 DEBUG ru.io.UsageLog4j:main:31 - debug message
+2025-10-25 11:46:51,228  INFO ru.io.UsageLog4j:main:32 - info message
+2025-10-25 11:46:51,228  WARN ru.io.UsageLog4j:main:33 - warn message
+2025-10-25 11:46:51,228 ERROR ru.io.UsageLog4j:main:34 - error message
