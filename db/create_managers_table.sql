@@ -1,9 +1,9 @@
 create table if not exists managers_info (
 id serial primary key,
 name text,
-birthday date,
 role text,
-sex boolean,
+birthday date,
+officially_employed boolean,
 phone varchar(11),
 salary int
 );
