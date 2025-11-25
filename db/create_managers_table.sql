@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS managers_info (
+create table if not exists managers_info (
 id serial primary key,
 name text,
 birthday date,
