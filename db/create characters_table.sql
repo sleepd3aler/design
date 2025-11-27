@@ -1,6 +1,0 @@
-create table characters
-(
-    id         serial primary key,
-    name       varchar(255),
-    account_id int references accounts (id)
-);
