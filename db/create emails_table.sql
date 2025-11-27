@@ -1,3 +1,4 @@
+
 create table emails
 (
     id       serial primary key,

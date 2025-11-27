@@ -1,3 +1,4 @@
+
 create table artists
 (
     id   serial primary key,

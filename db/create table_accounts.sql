@@ -1,3 +1,4 @@
+
 create table accounts
 (
     id       serial primary key,

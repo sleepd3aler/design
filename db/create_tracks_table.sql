@@ -1,3 +1,4 @@
+
 create table tracks
 (
     id   serial primary key,
