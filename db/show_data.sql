@@ -1,1 +1,2 @@
-select * from managers_info;
+select *
+from managers_info;

@@ -1,4 +1,3 @@
 insert
-	into
-	employees(name, position_id)
-VALUES ('Ivan',1);
+into employees(name, position_id)
+VALUES ('Ivan', 1);

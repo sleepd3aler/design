@@ -1,2 +1,11 @@
-create table people(id serial primary key, name varchar(255), passport_id int references passport(id) unique);
-create table people2(id serial primary key, name varchar(255));
+create table people
+(
+    id          serial primary key,
+    name        varchar(255),
+    passport_id int references passport (id) unique
+);
+create table people2
+(
+    id   serial primary key,
+    name varchar(255)
+);

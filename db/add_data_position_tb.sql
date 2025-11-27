@@ -1,4 +1,3 @@
 insert
-	into
-	position(name)
+into position(name)
 values ('programmer');
