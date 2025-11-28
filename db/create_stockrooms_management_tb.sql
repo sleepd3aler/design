@@ -19,7 +19,7 @@ CREATE TABLE stockrooms (
     id serial PRIMARY KEY,
     name varchar(255),
     category_id int REFERENCES categories (id),
-    manager_id int REFERENCES staff (id)
+    manager_id int REFERENCES staff (id) unique
 );
 
 CREATE TABLE products (
