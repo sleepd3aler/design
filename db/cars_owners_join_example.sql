@@ -42,30 +42,27 @@ INSERT INTO owners (name)
     VALUES ('Georgiy');
 
 SELECT
-    pp.name AS Владелец,
-    p.name AS Марка,
-    p.model AS Модель
+    o.name AS Владелец,
+    c.name AS Марка,
+    c.model AS Модель
 FROM
-    owners AS pp
-    JOIN cars AS p ON pp.car_id = p.id;
+    owners AS o
+    JOIN cars AS c ON o.car_id = c.id;
 
 SELECT
-    pp.reg_number AS "Регистрационный номер",
-    pp.model AS Марка,
-    p.name AS Владелец
+    c.reg_number AS "Регистрационный номер",
+    c.model AS Марка,
+    o.name AS Владелец
 FROM
-    cars AS pp
-    JOIN owners AS p ON pp.id = p.car_id
-        AND pp.reg_number IS NOT NULL;
-
+    cars AS c
+    JOIN owners AS o ON c.id = o.car_id
+        AND c.reg_number IS NOT NULL;
 
 SELECT
-    pp.name AS Владелец,
-    p.reg_number AS "Регистрационный номер"
+    o.name AS Владелец,
+    c.reg_number AS "Регистрационный номер"
 FROM
-    owners AS pp
-    JOIN cars AS p ON pp.car_id = p.id
-        AND p.reg_number IS NULL;
-
-
+    owners AS o
+    JOIN cars AS c ON o.car_id = c.id
+        AND c.reg_number IS NULL;
 
