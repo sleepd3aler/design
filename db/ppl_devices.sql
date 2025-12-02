@@ -4,15 +4,15 @@ CREATE TABLE devices (
     price float
 );
 
-CREATE TABLE people2 (
+CREATE TABLE people (
     id serial PRIMARY KEY,
     name varchar(255)
 );
 
-CREATE TABLE devices_people2 (
+CREATE TABLE devices_people (
     id serial PRIMARY KEY,
     device_id int REFERENCES devices (id),
-    people_id int REFERENCES people2 (id)
+    people_id int REFERENCES people (id)
 );
 
 INSERT INTO devices (name, price)
@@ -22,7 +22,7 @@ VALUES
     ('Dyson', 52000),
     ('Wi-Fi Router', 1200);
 
-INSERT INTO people2 (name)
+INSERT INTO people (name)
 VALUES
     ('Александр'),
     ('Мария'),
@@ -32,7 +32,7 @@ VALUES
     ('Ярослав'),
     ('Михаил');
 
-INSERT INTO devices_people2 (device_id, people_id)
+INSERT INTO devices_people (device_id, people_id)
     VALUES (1, 1),
     (2, 1),
     (1, 2),
@@ -52,9 +52,9 @@ SELECT
     p.name,
     avg(d.price)
 FROM
-    devices_people2 db
-    JOIN people2 p ON db.people_id = p.id
-    JOIN devices d ON db.device_id = d.id
+    devices_people dp
+    JOIN people p ON dp.people_id = p.id
+    JOIN devices d ON dp.device_id = d.id
 GROUP BY
     p.name
 HAVING
