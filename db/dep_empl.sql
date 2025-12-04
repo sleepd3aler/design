@@ -7,7 +7,7 @@ create table departments
 create table employees
 (
     id            serial primary key,
-    name          text,
+    name          varchar(255),
     department_id int references departments (id)
 );
 
@@ -21,7 +21,7 @@ create table departments_employees
 create table teens
 (
     id     serial primary key,
-    name   text,
+    name   varchar(255),
     gender varchar(1)
 );
 
@@ -63,6 +63,11 @@ select d.name
 from departments d
          left join departments_employees de on d.id = de.department_id
 where employee_id is null;
+
+select d.name Подразделение, e.name Сотрудник
+from departments d
+         full join departments_employees de on d.id = de.department_id
+         join employees e on de.employee_id = e.id;
 
 select d.name, employee_id
 from departments d
