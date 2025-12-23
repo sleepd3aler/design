@@ -75,15 +75,21 @@ public class ImportDB {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         ImportDB dataBase = new ImportDB("app.properties", "./data/dump.txt");
-        dataBase.save(dataBase.load());
-        try (Statement statement = dataBase.initConnection("app.properties").createStatement()) {
-            ResultSet resultSet = statement.executeQuery("select * from users");
-            while (resultSet.next()) {
-                System.out.printf("Username: %s%sEmail: %s%n", resultSet.getString("name"),
-                        System.lineSeparator(), resultSet.getString("email"));
+        try {
+            dataBase.save(dataBase.load());
+            try (Connection connection = dataBase.initConnection("app.properties");
+                    Statement statement = connection.createStatement()) {
+                ResultSet resultSet = statement.executeQuery("select * from users");
+                while (resultSet.next()) {
+                    System.out.printf("Username: %s%sEmail: %s%n", resultSet.getString("name"),
+                            System.lineSeparator(), resultSet.getString("email"));
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 }
