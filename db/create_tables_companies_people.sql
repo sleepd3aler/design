@@ -50,7 +50,3 @@ having count(p.id) = (select count(p2.id)
                       order by count(p2.id) desc
                       limit 1)
 order by count(p.id) desc;
-
-
--- 4. Залейте код в репозиторий, отправьте ссылку на коммит.
-
