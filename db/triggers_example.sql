@@ -65,7 +65,6 @@ CREATE TRIGGER tax_trigger
     FOR EACH statement
     EXECUTE PROCEDURE tax ();
 
- 
 CREATE OR REPLACE FUNCTION tax ()
     RETURNS TRIGGER
     AS $$
@@ -92,7 +91,6 @@ CREATE OR REPLACE TRIGGER tax_trigger
 
 INSERT INTO products (name, producer, count, price)
     VALUES ('Iphone 15', 'Apple', 1, 100000);
-
 
 CREATE OR REPLACE FUNCTION tax ()
     RETURNS TRIGGER
@@ -137,4 +135,61 @@ CREATE OR REPLACE TRIGGER add_to_history
 
 INSERT INTO products (name, producer, count, price)
     VALUES ('Berserk', 'Kentaro Miura', 1, 2500);
+
+CREATE TABLE products2 (
+    id serial PRIMARY KEY,
+    name varchar
+);
+
+ALTER TABLE products2
+    ADD price int,
+    ADD quantity int;
+
+CREATE TABLE priceAudit (
+    id serial PRIMARY KEY,
+    product_id int REFERENCES products2 (id),
+    old_price int,
+    new_price int,
+    change_date timestamp
+);
+
+CREATE OR REPLACE FUNCTION addNewPrice ()
+    RETURNS TRIGGER
+    AS $$
+BEGIN
+    INSERT INTO priceAudit (product_id, old_price, new_price, change_date)
+        VALUES (OLD.id, OLD.price, NEW.price, CURRENT_TIMESTAMP);
+    RETURN new;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE TRIGGER test_trigger
+    AFTER UPDATE ON products2
+    FOR EACH ROW
+    EXECUTE FUNCTION addNewPrice ();
+
+
+
+SELECT
+    *
+FROM
+    products2;
+
+SELECT
+    *
+FROM
+    priceAudit;
+
+INSERT INTO products2 (name, price, quantity)
+    VALUES ('pr1', 100, 1);
+
+UPDATE
+    products2
+SET
+    price = 120
+WHERE
+    id = 1;
+
+
 
