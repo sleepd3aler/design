@@ -1,0 +1,5 @@
+City: Moscow
+Street: Arbat
+Building: 10
+Floor: 3
+Apartment: 42

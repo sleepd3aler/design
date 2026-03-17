@@ -1,0 +1,5 @@
+City: Saint P
+Street: Doomskaya
+Building: 11
+Floor: 103
+Apartment: 666
