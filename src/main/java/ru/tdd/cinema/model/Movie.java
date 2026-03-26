@@ -1,4 +1,4 @@
-package ru.tdd.cinema;
+package ru.tdd.cinema.model;
 
 import java.util.Objects;
 
