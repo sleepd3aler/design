@@ -7,7 +7,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GeneratorTest {
-    Generator generator;
+    Generator generator = new SimpleGenerator();
+
+    @Test
+    void whenTemplateIsCorrectThatExceptedResult() {
+        String temp = "I am ${name}, My age is ${age}! I have a ${animal} with name: ${nickname}, his favorite food is: ${food}.";
+        Map<String, String> map = Map.of(
+                "name", "Alex",
+                "age", "32",
+                "animal", "cat",
+                "nickname", "Soma",
+                "food", "shrimp"
+        );
+        String expected = "I am Alex, My age is 32! I have a cat with name: Soma, his favorite food is: shrimp.";
+        String res = generator.produce(temp, map);
+        assertThat(res).isEqualTo(expected);
+    }
 
     @Test
     void whenTemplateDoesntContainsKeyThenExceptionThrown() {
@@ -55,21 +70,6 @@ class GeneratorTest {
         Map<String, String> map = Map.of();
         assertThatThrownBy(() -> generator.produce(temp, map))
                 .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void whenTemplateIsCorrectThatExceptedResult() {
-        String temp = "I am ${name}, My age is ${age}! I have a ${animal} with name: ${nickname}, his favorite food is: ${food}.";
-        Map<String, String> map = Map.of(
-                "name", "Alex",
-                "age", "32",
-                "animal", "cat",
-                "nickname", "Soma",
-                "food", "shrimp"
-        );
-        String expected = "I am Alex, My age is 32! I have a cat with name: Soma, his favorite food is: shrimp.";
-        String res = generator.produce(temp, map);
-        assertThat(res).isEqualTo(expected);
     }
 
     @Test
