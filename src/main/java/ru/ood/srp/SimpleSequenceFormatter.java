@@ -4,7 +4,11 @@ import java.util.Formatter;
 import java.util.List;
 
 public class SimpleSequenceFormatter implements SequenceFormatter<Integer> {
-    private final Formatter formatter = new Formatter();
+    private final Formatter formatter;
+
+    public SimpleSequenceFormatter(Formatter formatter) {
+        this.formatter = formatter;
+    }
 
     @Override
     public String format(List<Integer> sequence) {

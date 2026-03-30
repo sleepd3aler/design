@@ -3,13 +3,16 @@ package ru.ood.srp;
 import java.util.Random;
 
 public class SimpleNumberGenerator implements NumberGenerator<Integer> {
-    Random random = new Random();
+    private final Random random;
+    private final int diapason;
 
-    public SimpleNumberGenerator() {
+    public SimpleNumberGenerator(Random random, int diapason) {
+        this.random = random;
+        this.diapason = diapason;
     }
 
     @Override
     public Integer generate() {
-        return random.nextInt(10);
+        return random.nextInt(diapason);
     }
 }
