@@ -6,11 +6,13 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        NumberGenerator<Integer> numberGenerator = new SimpleNumberGenerator(new Random(), 100);
-        SequenceGenerator<Integer> generator = new SimpleSequenceGenerator(numberGenerator);
+        var numberGenerator = new SimpleNumberGenerator(new Random(), 10);
+        var generator = new SimpleSequenceGenerator(numberGenerator);
+        var validateGenerator = new ValidateGenerator<>(generator);
+        var loggingGenerator = new LoggingGenerator<>(validateGenerator);
         SequenceFormatter<Integer> formatter = new SimpleSequenceFormatter(new Formatter());
         Output output = new SequenceOutput();
-        List<Integer> sequence = generator.generate(100);
+        List<Integer> sequence = loggingGenerator.generate(2);
         String formatedResult = formatter.format(sequence);
         output.printMessage(formatedResult);
     }

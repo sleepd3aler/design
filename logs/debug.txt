@@ -18,3 +18,19 @@ java.lang.Exception: Not Supported code
 2025-10-25 11:46:51,228  INFO ru.io.UsageLog4j:main:32 - info message
 2025-10-25 11:46:51,228  WARN ru.io.UsageLog4j:main:33 - warn message
 2025-10-25 11:46:51,228 ERROR ru.io.UsageLog4j:main:34 - error message
+2026-03-31 01:52:29,993  INFO ru.ood.srp.LoggingGenerator:generate:19 - Sequence generated successful;
+2026-03-31 01:53:40,430  INFO ru.ood.srp.LoggingGenerator:generate:19 - Sequence generated successful;
+2026-03-31 01:54:06,641 ERROR ru.ood.srp.LoggingGenerator:generate:22 - bound must be positive
+2026-03-31 02:02:58,287  INFO ru.ood.srp.LoggingGenerator:generate:19 - Sequence generated successful;
+2026-03-31 02:03:18,978  INFO ru.ood.srp.LoggingGenerator:generate:19 - Sequence generated successful;
+2026-03-31 02:04:59,443 ERROR ru.ood.srp.LoggingGenerator:generate:22 - 
+2026-03-31 02:05:14,934  INFO ru.ood.srp.LoggingGenerator:generate:19 - Sequence generated successful;
+2026-03-31 02:05:52,540  INFO ru.ood.srp.LoggingGenerator:generate:19 - Sequence generated successful;
+2026-03-31 02:05:57,332 ERROR ru.ood.srp.LoggingGenerator:generate:22 - 
+2026-03-31 02:06:22,362 ERROR ru.ood.srp.LoggingGenerator:generate:23 - [ru.ood.srp.ValidateGenerator.validateSize(ValidateGenerator.java:20), ru.ood.srp.ValidateGenerator.generate(ValidateGenerator.java:14), ru.ood.srp.LoggingGenerator.generate(LoggingGenerator.java:19), ru.ood.srp.Main.main(Main.java:15)]
+2026-03-31 02:08:00,948 ERROR ru.ood.srp.LoggingGenerator:generate:23 - Sequence size can not be zero.
+2026-03-31 02:09:22,878 ERROR ru.ood.srp.LoggingGenerator:generate:23 - Sequence size can not be zero.
+2026-03-31 02:10:11,613 ERROR ru.ood.srp.LoggingGenerator:generate:23 - Sequence size can not be zero.
+2026-03-31 02:10:15,702 ERROR ru.ood.srp.LoggingGenerator:generate:23 - Sequence size can not be zero.
+2026-03-31 02:10:18,343  INFO ru.ood.srp.LoggingGenerator:generate:20 - Sequence generated successful;
+2026-03-31 02:10:59,658  INFO ru.ood.srp.LoggingGenerator:generate:20 - Sequence generated successful;
