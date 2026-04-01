@@ -1,25 +1,37 @@
 package ru.ood.srp.report;
 
 import java.util.Calendar;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.ood.srp.exceptions.GererationException;
 import ru.ood.srp.model.Employee;
 import ru.ood.srp.store.MemStore;
 import ru.ood.srp.store.Store;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class HrReportTest {
+    private Store store;
+    private Employee mary;
+    private Employee artem;
+    private Employee alex;
+    private Report report;
+
+    @BeforeEach
+    void setUp() {
+        mary = new Employee("Mary", Calendar.getInstance(), Calendar.getInstance(), 1700);
+        artem = new Employee("Artem", Calendar.getInstance(), Calendar.getInstance(), 1500);
+        alex = new Employee("Alex", Calendar.getInstance(), Calendar.getInstance(), 1000);
+        store = new MemStore();
+        report = new HrReport(store);
+    }
 
     @Test
     void whenGeneratedHrReportThenExpectedResult() {
-        Employee mary = new Employee("Mary", Calendar.getInstance(), Calendar.getInstance(), 1700);
-        Employee artem = new Employee("Artem", Calendar.getInstance(), Calendar.getInstance(), 1500);
-        Employee alex = new Employee("Alex", Calendar.getInstance(), Calendar.getInstance(), 1000);
-        Store store = new MemStore();
         store.add(alex);
         store.add(artem);
         store.add(mary);
-        Report report = new HrReport(store);
         StringBuilder expected = new StringBuilder()
                 .append("Name; Salary;")
                 .append(System.lineSeparator())
@@ -34,5 +46,66 @@ class HrReportTest {
                 .append(System.lineSeparator());
         String res = report.generate(e -> true);
         assertThat(res).isEqualTo(expected.toString());
+    }
+
+    @Test
+    void whenEmployeesDontFoundThenExceptionThrown() {
+        store.add(alex);
+        store.add(artem);
+        store.add(mary);
+        assertThatThrownBy(() -> report.generate(employee -> employee.getName().equals("Andrey")))
+                .isInstanceOf(GererationException.class)
+                .hasMessageContaining("Cannot generate report by current condition");
+    }
+
+    @Test
+    void whenStorageContainsNullEmployeeThenExceptionThrown() {
+        store.add(artem);
+        store.add(null);
+        assertThatThrownBy(() -> report.generate(e -> true))
+                .isInstanceOf(GererationException.class)
+                .hasMessageContaining("Cannot generate report: null employee provided.");
+    }
+
+    @Test
+    void whenEmployeeMissingNameThenExceptionThrown() {
+        store.add(artem);
+        alex.setName("");
+        store.add(alex);
+        store.add(mary);
+        assertThatThrownBy(() -> report.generate(e -> true))
+                .isInstanceOf(GererationException.class)
+                .hasMessageContaining("Employee must contain name.");
+    }
+
+    @Test
+    void whenEmployeeMissingHiredOrFiredInfoThenExceptionThrown() {
+        store.add(artem);
+        alex.setFired(null);
+        store.add(alex);
+        store.add(mary);
+        assertThatThrownBy(() -> report.generate(e -> true))
+                .isInstanceOf(GererationException.class)
+                .hasMessageContaining(alex.getName() + " hired or fired info is missing.");
+    }
+
+    @Test
+    void whenEmployeesSalaryIsNegativeThenExceptionThrown() {
+        store.add(artem);
+        alex.setSalary(-1);
+        store.add(alex);
+        assertThatThrownBy(() -> report.generate(e -> true))
+                .isInstanceOf(GererationException.class)
+                .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
+    }
+
+    @Test
+    void whenEmployeesSalaryIsZeroThenExceptionThrown() {
+        store.add(artem);
+        alex.setSalary(0);
+        store.add(alex);
+        assertThatThrownBy(() -> report.generate(e -> true))
+                .isInstanceOf(GererationException.class)
+                .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }
 }
