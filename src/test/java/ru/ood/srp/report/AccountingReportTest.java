@@ -5,12 +5,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.ood.srp.currency.CurrencyConverter;
 import ru.ood.srp.currency.InMemoryCurrencyConverter;
-import ru.ood.srp.exceptions.GererationException;
+import ru.ood.srp.exceptions.GenerationException;
 import ru.ood.srp.formatter.DateTimeParser;
 import ru.ood.srp.formatter.ReportDateTimeParser;
 import ru.ood.srp.model.Employee;
 import ru.ood.srp.store.MemStore;
 import ru.ood.srp.store.Store;
+import ru.ood.srp.validator.AccountingReportValidator;
+import ru.ood.srp.validator.EmployeeValidator;
+import ru.ood.srp.validator.Validator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -25,6 +28,8 @@ class AccountingReportTest {
     private Report report;
     private DateTimeParser<Calendar> parser;
     private CurrencyConverter converter;
+    private Validator validator;
+    private EmployeeValidator empValidator;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +39,9 @@ class AccountingReportTest {
         store = new MemStore();
         parser = new ReportDateTimeParser();
         converter = new InMemoryCurrencyConverter();
-        report = new AccountingReport(store, converter, RUB, USD, parser);
+        validator = new AccountingReportValidator();
+        empValidator = new EmployeeValidator();
+        report = new AccountingReport(store, converter, RUB, USD, parser, validator, empValidator);
     }
 
     @Test
@@ -70,7 +77,7 @@ class AccountingReportTest {
         store.add(artem);
         store.add(mary);
         assertThatThrownBy(() -> report.generate(employee -> employee.getName().equals("Andrey")))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report by current condition");
     }
 
@@ -79,7 +86,7 @@ class AccountingReportTest {
         store.add(artem);
         store.add(null);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report: null employee provided.");
     }
 
@@ -90,7 +97,7 @@ class AccountingReportTest {
         store.add(alex);
         store.add(mary);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Employee must contain name.");
     }
 
@@ -101,7 +108,7 @@ class AccountingReportTest {
         store.add(alex);
         store.add(mary);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " hired or fired info is missing.");
     }
 
@@ -111,7 +118,7 @@ class AccountingReportTest {
         alex.setSalary(-1);
         store.add(alex);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }
 
@@ -121,7 +128,7 @@ class AccountingReportTest {
         alex.setSalary(0);
         store.add(alex);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }
 }

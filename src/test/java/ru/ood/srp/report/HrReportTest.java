@@ -3,10 +3,13 @@ package ru.ood.srp.report;
 import java.util.Calendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.ood.srp.exceptions.GererationException;
+import ru.ood.srp.exceptions.GenerationException;
 import ru.ood.srp.model.Employee;
 import ru.ood.srp.store.MemStore;
 import ru.ood.srp.store.Store;
+import ru.ood.srp.validator.EmployeeValidator;
+import ru.ood.srp.validator.HrReportValidator;
+import ru.ood.srp.validator.Validator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,6 +20,8 @@ class HrReportTest {
     private Employee artem;
     private Employee alex;
     private Report report;
+    private Validator validator;
+    private EmployeeValidator empValidator;
 
     @BeforeEach
     void setUp() {
@@ -24,7 +29,9 @@ class HrReportTest {
         artem = new Employee("Artem", Calendar.getInstance(), Calendar.getInstance(), 1500);
         alex = new Employee("Alex", Calendar.getInstance(), Calendar.getInstance(), 1000);
         store = new MemStore();
-        report = new HrReport(store);
+        validator = new HrReportValidator();
+        empValidator = new EmployeeValidator();
+        report = new HrReport(store, validator, empValidator);
     }
 
     @Test
@@ -54,7 +61,7 @@ class HrReportTest {
         store.add(artem);
         store.add(mary);
         assertThatThrownBy(() -> report.generate(employee -> employee.getName().equals("Andrey")))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report by current condition");
     }
 
@@ -63,7 +70,7 @@ class HrReportTest {
         store.add(artem);
         store.add(null);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report: null employee provided.");
     }
 
@@ -74,7 +81,7 @@ class HrReportTest {
         store.add(alex);
         store.add(mary);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Employee must contain name.");
     }
 
@@ -85,7 +92,7 @@ class HrReportTest {
         store.add(alex);
         store.add(mary);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " hired or fired info is missing.");
     }
 
@@ -95,7 +102,7 @@ class HrReportTest {
         alex.setSalary(-1);
         store.add(alex);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }
 
@@ -105,7 +112,7 @@ class HrReportTest {
         alex.setSalary(0);
         store.add(alex);
         assertThatThrownBy(() -> report.generate(e -> true))
-                .isInstanceOf(GererationException.class)
+                .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }
 }
