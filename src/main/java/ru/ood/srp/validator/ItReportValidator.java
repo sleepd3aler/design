@@ -9,7 +9,7 @@ public class ItReportValidator implements Validator {
         if (parts[0].isBlank()) {
             throw new GenerationException("Topic is missing");
         }
-        for (int i = 1; i < parts.length - 1; i++) {
+        for (int i = 1; i < parts.length; i++) {
             String[] content = parts[i].split(",");
             if (!checkContent(content)) {
                 throw new GenerationException("Employee info must contain Name and Salary only, and cant be empty.");
