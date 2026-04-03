@@ -3,22 +3,24 @@ package ru.ood.srp.report;
 import java.util.Calendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.ood.srp.currency.CurrencyConverter;
-import ru.ood.srp.currency.InMemoryCurrencyConverter;
-import ru.ood.srp.exceptions.GenerationException;
-import ru.ood.srp.formatter.DateTimeParser;
-import ru.ood.srp.formatter.ReportDateTimeParser;
-import ru.ood.srp.model.Employee;
-import ru.ood.srp.store.MemStore;
-import ru.ood.srp.store.Store;
-import ru.ood.srp.validator.AccountingReportValidator;
-import ru.ood.srp.validator.EmployeeValidator;
-import ru.ood.srp.validator.Validator;
+import ru.srp.reports.currency.CurrencyConverter;
+import ru.srp.reports.currency.InMemoryCurrencyConverter;
+import ru.srp.reports.exceptions.GenerationException;
+import ru.srp.reports.formatter.DateTimeParser;
+import ru.srp.reports.formatter.ReportDateTimeParser;
+import ru.srp.reports.model.Employee;
+import ru.srp.reports.report.AccountingReport;
+import ru.srp.reports.report.Report;
+import ru.srp.reports.store.MemStore;
+import ru.srp.reports.store.Store;
+import ru.srp.reports.validator.AccountingReportValidator;
+import ru.srp.reports.validator.EmployeeValidator;
+import ru.srp.reports.validator.Validator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static ru.ood.srp.currency.Currency.RUB;
-import static ru.ood.srp.currency.Currency.USD;
+import static ru.srp.reports.currency.Currency.RUB;
+import static ru.srp.reports.currency.Currency.USD;
 
 class AccountingReportTest {
     private Store store;
