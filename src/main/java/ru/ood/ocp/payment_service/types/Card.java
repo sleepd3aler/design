@@ -1,7 +1,7 @@
 package ru.ood.ocp.payment_service.types;
 
 public class Card implements Type {
-    private String name;
+    private final String name;
 
     public Card(String name) {
         this.name = name;

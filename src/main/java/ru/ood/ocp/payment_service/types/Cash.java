@@ -1,7 +1,7 @@
 package ru.ood.ocp.payment_service.types;
 
 public class Cash implements Type {
-    private String name;
+    private final String name;
 
     public Cash(String name) {
         this.name = name;

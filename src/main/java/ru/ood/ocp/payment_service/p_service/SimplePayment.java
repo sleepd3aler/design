@@ -5,23 +5,23 @@ import java.util.function.Predicate;
 import ru.ood.ocp.payment_service.types.Type;
 
 public class SimplePayment implements PaymentService {
-    private Map<String, Type> pTypes;
+    private final Map<String, Type> paymentTypes;
 
-    public SimplePayment(Map<String, Type> pTypes) {
-        this.pTypes = pTypes;
+    public SimplePayment(Map<String, Type> paymentTypes) {
+        this.paymentTypes = paymentTypes;
     }
 
     @Override
     public void process(String type, double amount) {
-        checkExists(p -> pTypes.containsKey(type), type);
-        Type paymentT = pTypes.get(type);
-        paymentT.process(amount);
+        checkExists(p -> paymentTypes.containsKey(type), type);
+        Type paymentType = paymentTypes.get(type);
+        paymentType.process(amount);
     }
 
     @Override
     public void addNewPayment(Type type) {
-        if (type != null && !pTypes.containsKey(type.getName())) {
-            pTypes.put(type.getName(), type);
+        if (type != null && !paymentTypes.containsKey(type.getName())) {
+            paymentTypes.put(type.getName(), type);
         }
     }
 

@@ -1,7 +1,7 @@
 package ru.ood.ocp.payment_service.types;
 
 public class Paypal implements Type {
-    private String name;
+    private final String name;
 
     public Paypal(String name) {
         this.name = name;
