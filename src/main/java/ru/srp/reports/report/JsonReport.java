@@ -13,13 +13,13 @@ public class JsonReport implements Report {
     private final Store store;
     private final Validator validator;
     private final EmployeeValidator employeeValidator;
-    private final Gson library;
+    private final Gson gson;
 
-    public JsonReport(Store store, Validator validator, EmployeeValidator employeeValidator, GsonBuilder library) {
+    public JsonReport(Store store, Validator validator, EmployeeValidator employeeValidator, GsonBuilder gson) {
         this.store = store;
         this.validator = validator;
         this.employeeValidator = employeeValidator;
-        this.library = library.create();
+        this.gson = gson.create();
 
     }
 
@@ -28,7 +28,7 @@ public class JsonReport implements Report {
         List<Employee> res = store.findBy(filter);
         employeeValidator.validateSearchingResult(res);
         res.forEach(employeeValidator::validateEmployee);
-        String json = library.toJson(res);
+        String json = gson.toJson(res);
         validator.validateReport(json);
         return json;
     }
