@@ -6,8 +6,15 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class XmlCalendarAdapter extends XmlAdapter<String, Calendar> {
-    private final SimpleDateFormat formatter = new SimpleDateFormat("dd:MM:yyyy HH:mm");
+    private SimpleDateFormat formatter = new SimpleDateFormat();
     private final Calendar dateTime = new GregorianCalendar();
+
+    public XmlCalendarAdapter() {
+    }
+
+    public XmlCalendarAdapter(String format) {
+        formatter = new SimpleDateFormat(format);
+    }
 
     @Override
     public Calendar unmarshal(String string) throws Exception {

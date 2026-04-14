@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.srp.reports.adapters.XmlCalendarAdapter;
+import ru.srp.reports.configurations.Config;
 import ru.srp.reports.exceptions.GenerationException;
 import ru.srp.reports.model.Employee;
 import ru.srp.reports.model.Employees;
@@ -25,9 +27,12 @@ class XmlReportTest {
     private EmployeeValidator employeeValidator;
     private Employee employee1;
     private Employee employee2;
+    private Config config;
 
     @BeforeEach
     void setUp() {
+        config = new Config();
+        config.load("srp/app.properties");
         store = new MemStore();
         validator = new XmlReportValidator();
         employeeValidator = new EmployeeValidator();
@@ -46,6 +51,7 @@ class XmlReportTest {
         JAXBContext context = JAXBContext.newInstance(Employees.class);
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.setAdapter(new XmlCalendarAdapter(config.get("format")));
         store.add(employee1);
         store.add(employee2);
         Report report = new XmlReport(store, validator, employeeValidator, marshaller);
