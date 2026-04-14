@@ -1,13 +1,20 @@
 package ru.srp.reports.model;
 
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Calendar;
 import java.util.Objects;
+import ru.srp.reports.adapters.XmlCalendarAdapter;
 
+@XmlType(propOrder = {"name", "hired", "fired", "salary"})
 public class Employee {
     private String name;
     private Calendar hired;
     private Calendar fired;
     private double salary;
+
+    public Employee() {
+    }
 
     public Employee(String name, Calendar hired, Calendar fired, double salary) {
         this.name = name;
@@ -24,6 +31,7 @@ public class Employee {
         this.name = name;
     }
 
+    @XmlJavaTypeAdapter(XmlCalendarAdapter.class)
     public Calendar getHired() {
         return hired;
     }
@@ -32,6 +40,7 @@ public class Employee {
         this.hired = hired;
     }
 
+    @XmlJavaTypeAdapter(XmlCalendarAdapter.class)
     public Calendar getFired() {
         return fired;
     }
