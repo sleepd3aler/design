@@ -34,7 +34,7 @@ class XmlReportTest {
         config = new Config();
         config.load("srp/app.properties");
         store = new MemStore();
-        validator = new XmlReportValidator();
+        validator = new XmlReportValidator(config.get("format"));
         employeeValidator = new EmployeeValidator();
         employee1 = new Employee("John Doe",
                 new GregorianCalendar(2023, Calendar.JUNE, 8, 17, 41),

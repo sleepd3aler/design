@@ -8,6 +8,11 @@ import ru.srp.reports.exceptions.GenerationException;
 
 public class XmlReportValidator implements Validator {
     Pattern pattern = Pattern.compile("(<hired>|<fired>)\\s*([^<]+)\\s*</");
+    private final String format;
+
+    public XmlReportValidator(String format) {
+        this.format = format;
+    }
 
     @Override
     public void validateReport(String report) {
@@ -27,7 +32,7 @@ public class XmlReportValidator implements Validator {
     }
 
     private void parseDateTimeFormat(String report) {
-        SimpleDateFormat check = new SimpleDateFormat("dd:MM:yyyy HH:mm");
+        SimpleDateFormat check = new SimpleDateFormat(format);
         try {
             check.parse(report);
         } catch (ParseException e) {
