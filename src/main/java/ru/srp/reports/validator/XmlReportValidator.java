@@ -8,9 +8,13 @@ import ru.srp.reports.exceptions.GenerationException;
 
 public class XmlReportValidator implements Validator {
     Pattern pattern = Pattern.compile("(<hired>|<fired>)\\s*([^<]+)\\s*</");
-    private final String format;
+    private  String format;
 
     public XmlReportValidator(String format) {
+        this.format = format;
+    }
+
+    public void setFormat(String format) {
         this.format = format;
     }
 

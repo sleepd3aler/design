@@ -18,4 +18,8 @@ public class Config {
     public String get(String key) {
         return properties.getProperty(key);
     }
+
+    public void setFormat(String key, String value) {
+        properties.setProperty(key, value);
+    }
 }
