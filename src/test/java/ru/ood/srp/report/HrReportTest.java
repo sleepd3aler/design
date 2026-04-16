@@ -3,15 +3,16 @@ package ru.ood.srp.report;
 import java.util.Calendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.srp.reports.exceptions.GenerationException;
-import ru.srp.reports.model.Employee;
-import ru.srp.reports.report.HrReport;
-import ru.srp.reports.report.Report;
-import ru.srp.reports.store.MemStore;
-import ru.srp.reports.store.Store;
-import ru.srp.reports.validator.EmployeeValidator;
-import ru.srp.reports.validator.HrReportValidator;
-import ru.srp.reports.validator.Validator;
+import ru.report_generation_app.exceptions.GenerationException;
+import ru.report_generation_app.model.Employee;
+import ru.report_generation_app.report.HrReport;
+import ru.report_generation_app.report.Report;
+import ru.report_generation_app.store.MemStore;
+import ru.report_generation_app.store.Store;
+import ru.report_generation_app.validator.EmployeeValidator;
+import ru.report_generation_app.validator.HrReportValidator;
+import ru.report_generation_app.validator.Validator;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

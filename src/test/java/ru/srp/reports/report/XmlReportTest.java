@@ -7,16 +7,18 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.srp.reports.adapters.XmlCalendarAdapter;
-import ru.srp.reports.configurations.FileConfig;
-import ru.srp.reports.exceptions.GenerationException;
-import ru.srp.reports.model.Employee;
-import ru.srp.reports.model.Employees;
-import ru.srp.reports.store.MemStore;
-import ru.srp.reports.store.Store;
-import ru.srp.reports.validator.EmployeeValidator;
-import ru.srp.reports.validator.Validator;
-import ru.srp.reports.validator.XmlReportValidator;
+import ru.report_generation_app.adapters.XmlCalendarAdapter;
+import ru.report_generation_app.configurations.FileConfig;
+import ru.report_generation_app.exceptions.GenerationException;
+import ru.report_generation_app.model.Employee;
+import ru.report_generation_app.model.Employees;
+import ru.report_generation_app.report.Report;
+import ru.report_generation_app.report.XmlReport;
+import ru.report_generation_app.store.MemStore;
+import ru.report_generation_app.store.Store;
+import ru.report_generation_app.validator.EmployeeValidator;
+import ru.report_generation_app.validator.Validator;
+import ru.report_generation_app.validator.XmlReportValidator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,7 +34,7 @@ class XmlReportTest {
     @BeforeEach
     void setUp() {
         fileConfig = new FileConfig();
-        fileConfig.load("srp/app.properties");
+        fileConfig.load("reports/app.properties");
         store = new MemStore();
         validator = new XmlReportValidator(fileConfig.get("format"));
         employeeValidator = new EmployeeValidator();
@@ -54,7 +56,7 @@ class XmlReportTest {
         marshaller.setAdapter(new XmlCalendarAdapter(fileConfig.get("format")));
         store.add(employee1);
         store.add(employee2);
-        Report report = new XmlReport(store, validator, employeeValidator, marshaller, fileConfig);
+        Report report = new XmlReport(store, validator, employeeValidator, marshaller);
         String expect = """
                 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                 <employees>
@@ -81,7 +83,7 @@ class XmlReportTest {
         Marshaller marshaller = context.createMarshaller();
         store.add(employee1);
         store.add(employee2);
-        Report report = new XmlReport(store, validator, employeeValidator, marshaller, fileConfig);
+        Report report = new XmlReport(store, validator, employeeValidator, marshaller);
         String expect = """
                 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                 <employees>
