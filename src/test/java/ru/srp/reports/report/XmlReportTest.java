@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.srp.reports.adapters.XmlCalendarAdapter;
-import ru.srp.reports.configurations.Config;
+import ru.srp.reports.configurations.FileConfig;
 import ru.srp.reports.exceptions.GenerationException;
 import ru.srp.reports.model.Employee;
 import ru.srp.reports.model.Employees;
@@ -27,14 +27,14 @@ class XmlReportTest {
     private EmployeeValidator employeeValidator;
     private Employee employee1;
     private Employee employee2;
-    private Config config;
+    private FileConfig fileConfig;
 
     @BeforeEach
     void setUp() {
-        config = new Config();
-        config.load("srp/app.properties");
+        fileConfig = new FileConfig();
+        fileConfig.load("srp/app.properties");
         store = new MemStore();
-        validator = new XmlReportValidator(config.get("format"));
+        validator = new XmlReportValidator(fileConfig.get("format"));
         employeeValidator = new EmployeeValidator();
         employee1 = new Employee("John Doe",
                 new GregorianCalendar(2023, Calendar.JUNE, 8, 17, 41),
@@ -51,10 +51,10 @@ class XmlReportTest {
         JAXBContext context = JAXBContext.newInstance(Employees.class);
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setAdapter(new XmlCalendarAdapter(config.get("format")));
+        marshaller.setAdapter(new XmlCalendarAdapter(fileConfig.get("format")));
         store.add(employee1);
         store.add(employee2);
-        Report report = new XmlReport(store, validator, employeeValidator, marshaller);
+        Report report = new XmlReport(store, validator, employeeValidator, marshaller, fileConfig);
         String expect = """
                 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                 <employees>
@@ -81,7 +81,7 @@ class XmlReportTest {
         Marshaller marshaller = context.createMarshaller();
         store.add(employee1);
         store.add(employee2);
-        Report report = new XmlReport(store, validator, employeeValidator, marshaller);
+        Report report = new XmlReport(store, validator, employeeValidator, marshaller, fileConfig);
         String expect = """
                 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                 <employees>

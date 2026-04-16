@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.function.Predicate;
+import ru.srp.reports.configurations.Config;
 import ru.srp.reports.model.Employee;
 import ru.srp.reports.model.Employees;
 import ru.srp.reports.store.Store;
@@ -17,12 +18,14 @@ public class XmlReport implements Report {
     private final Validator validator;
     private final EmployeeValidator employeeValidator;
     private final Marshaller marshaller;
+    private final Config config;
 
-    public XmlReport(Store store, Validator validator, EmployeeValidator employeeValidator, Marshaller marshaller) {
+    public XmlReport(Store store, Validator validator, EmployeeValidator employeeValidator, Marshaller marshaller, Config config) {
         this.store = store;
         this.validator = validator;
         this.employeeValidator = employeeValidator;
         this.marshaller = marshaller;
+        this.config = config;
     }
 
     @Override
