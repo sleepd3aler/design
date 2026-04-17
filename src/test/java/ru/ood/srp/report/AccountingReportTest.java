@@ -32,6 +32,7 @@ class AccountingReportTest {
     private CurrencyConverter converter;
     private Validator validator;
     private EmployeeValidator empValidator;
+    private String dateFormat;
 
     @BeforeEach
     void setUp() {
@@ -44,6 +45,7 @@ class AccountingReportTest {
         validator = new AccountingReportValidator();
         empValidator = new EmployeeValidator();
         report = new AccountingReport(store, converter, RUB, USD, parser, validator, empValidator);
+        dateFormat = "dd:MM:yyyy HH:mm";
     }
 
     @Test
@@ -54,22 +56,22 @@ class AccountingReportTest {
         StringBuilder expected = new StringBuilder()
                 .append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator())
-                .append(alex.getName()).append(" ")
-                .append(parser.parse(alex.getHired())).append(" ")
-                .append(parser.parse(alex.getFired())).append(" ")
+                .append(alex.getName()).append(";")
+                .append(parser.parse(alex.getHired(), dateFormat)).append(";")
+                .append(parser.parse(alex.getFired(), dateFormat)).append(";")
                 .append(converter.convert(RUB, alex.getSalary(), USD))
                 .append(System.lineSeparator())
-                .append(artem.getName()).append(" ")
-                .append(parser.parse(artem.getHired())).append(" ")
-                .append(parser.parse(artem.getFired())).append(" ")
+                .append(artem.getName()).append(";")
+                .append(parser.parse(artem.getHired(), dateFormat)).append(";")
+                .append(parser.parse(artem.getFired(), dateFormat)).append(";")
                 .append(converter.convert(RUB, artem.getSalary(), USD))
                 .append(System.lineSeparator())
-                .append(mary.getName()).append(" ")
-                .append(parser.parse(mary.getHired())).append(" ")
-                .append(parser.parse(mary.getFired())).append(" ")
+                .append(mary.getName()).append(";")
+                .append(parser.parse(mary.getHired(), dateFormat)).append(";")
+                .append(parser.parse(mary.getFired(), dateFormat)).append(";")
                 .append(converter.convert(RUB, mary.getSalary(), USD))
                 .append(System.lineSeparator());
-        String res = report.generate(e -> true);
+        String res = report.generate(e -> true, dateFormat);
         assertThat(res).isEqualTo(expected.toString());
     }
 
@@ -78,7 +80,7 @@ class AccountingReportTest {
         store.add(alex);
         store.add(artem);
         store.add(mary);
-        assertThatThrownBy(() -> report.generate(employee -> employee.getName().equals("Andrey")))
+        assertThatThrownBy(() -> report.generate(employee -> employee.getName().equals("Andrey"), dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report by current condition");
     }
@@ -87,7 +89,7 @@ class AccountingReportTest {
     void whenStorageContainsNullEmployeeThenExceptionThrown() {
         store.add(artem);
         store.add(null);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report: null employee provided.");
     }
@@ -98,7 +100,7 @@ class AccountingReportTest {
         alex.setName("");
         store.add(alex);
         store.add(mary);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Employee must contain name.");
     }
@@ -109,7 +111,7 @@ class AccountingReportTest {
         alex.setFired(null);
         store.add(alex);
         store.add(mary);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " hired or fired info is missing.");
     }
@@ -119,7 +121,7 @@ class AccountingReportTest {
         store.add(artem);
         alex.setSalary(-1);
         store.add(alex);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }
@@ -129,7 +131,7 @@ class AccountingReportTest {
         store.add(artem);
         alex.setSalary(0);
         store.add(alex);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }

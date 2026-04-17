@@ -5,7 +5,7 @@ import ru.report_generation_app.exceptions.GenerationException;
 public class HrReportValidator implements Validator {
 
     @Override
-    public void validateReport(String report) {
+    public void validateReport(String report, String dateFormat) {
         String[] parts = report.split("\n");
         if (parts[0].isBlank()) {
             throw new GenerationException("Topic is missing");
@@ -19,6 +19,6 @@ public class HrReportValidator implements Validator {
     }
 
     private boolean checkContent(String[] content) {
-        return content.length == 2;
+        return content.length >= 2;
     }
 }

@@ -1,27 +1,17 @@
 package ru.report_generation_app.validator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import ru.report_generation_app.exceptions.GenerationException;
 
+import static ru.report_generation_app.utils.ValidatorUtils.checkDateTime;
+
 public class XmlReportValidator implements Validator {
-    Pattern pattern = Pattern.compile("(<hired>|<fired>)\\s*([^<]+)\\s*</");
-    private  String format;
-
-    public XmlReportValidator(String format) {
-        this.format = format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
+    private final Pattern pattern = Pattern.compile("(<hired>|<fired>)\\s*([^<]+)\\s*</");
 
     @Override
-    public void validateReport(String report) {
+    public void validateReport(String report, String format) {
         checkXmlFormat(report);
-        checkDateTime(report);
+        checkDateTime(pattern, report, format);
     }
 
     private void checkXmlFormat(String report) {
@@ -32,27 +22,6 @@ public class XmlReportValidator implements Validator {
 
         if (!report.contains(System.lineSeparator())) {
             throw new GenerationException("Xml report has wrong format. Set pretty printing");
-        }
-    }
-
-    private void parseDateTimeFormat(String report) {
-        SimpleDateFormat check = new SimpleDateFormat(format);
-        try {
-            check.parse(report);
-        } catch (ParseException e) {
-            throw new GenerationException("Illegal Date : Time format, must be \"dd:MM:yyyy HH:mm\"");
-        }
-    }
-
-    private void checkDateTime(String report) {
-        Matcher matcher = pattern.matcher(report);
-        if (!matcher.find()) {
-            throw new GenerationException("Illegal Date : Time format, must be \"dd:MM:yyyy HH:mm\"");
-        }
-        matcher.reset();
-        while (matcher.find()) {
-            String dateTime = matcher.group(2);
-            parseDateTimeFormat(dateTime);
         }
     }
 }

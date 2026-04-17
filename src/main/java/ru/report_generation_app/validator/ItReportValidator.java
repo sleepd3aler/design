@@ -2,9 +2,14 @@ package ru.report_generation_app.validator;
 
 import ru.report_generation_app.exceptions.GenerationException;
 
+import static ru.report_generation_app.constants.Constants.*;
+
+import static ru.report_generation_app.utils.ValidatorUtils.checkDateTime;
+
 public class ItReportValidator implements Validator {
+
     @Override
-    public void validateReport(String report) {
+    public void validateReport(String report, String dateFormat) {
         String[] parts = report.split("\n");
         if (parts[0].isBlank()) {
             throw new GenerationException("Topic is missing");
@@ -14,6 +19,8 @@ public class ItReportValidator implements Validator {
             if (!checkContent(content)) {
                 throw new GenerationException("Employee info must contain Name and Salary only, and cant be empty.");
             }
+            checkDateTime(content[HIRED], dateFormat);
+            checkDateTime(content[FIRED], dateFormat);
         }
     }
 
@@ -21,8 +28,4 @@ public class ItReportValidator implements Validator {
         return content.length == 4;
     }
 
-    public static void main(String[] args) {
-        ItReportValidator validator = new ItReportValidator();
-        validator.validateReport("asd asd");
-    }
 }

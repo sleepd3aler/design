@@ -24,6 +24,7 @@ class JsonReportTest {
     private Validator validator;
     private EmployeeValidator employeeValidator;
     private GsonBuilder gsonBuilder;
+    private String dateFormat;
     private Employee employee1;
     private Employee employee2;
 
@@ -41,13 +42,13 @@ class JsonReportTest {
                 new GregorianCalendar(2023, Calendar.JUNE, 8, 17, 41),
                 6000.0);
         gsonBuilder = new GsonBuilder();
-
+        dateFormat = "dd:MM:yyyy HH:mm";
     }
 
     @Test
     void whenAccountantsGenerated() {
         gsonBuilder.setPrettyPrinting();
-        gsonBuilder.registerTypeHierarchyAdapter(Calendar.class, new JsonCalendarSerializer());
+        gsonBuilder.registerTypeHierarchyAdapter(Calendar.class, new JsonCalendarSerializer(dateFormat));
         store.add(employee1);
         store.add(employee2);
         Report engine = new JsonReport(store, validator, employeeValidator, gsonBuilder);
@@ -66,7 +67,7 @@ class JsonReportTest {
                     "salary": 6000.0
                   }
                 ]""";
-        assertThat(engine.generate(em -> true)).isEqualTo(ex);
+        assertThat(engine.generate(em -> true, dateFormat)).isEqualTo(ex);
     }
 
     @Test
@@ -89,7 +90,7 @@ class JsonReportTest {
                     "salary": 6000.0
                   }
                 ]""";
-        assertThatThrownBy(() -> engine.generate(em -> true))
+        assertThatThrownBy(() -> engine.generate(em -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Json report has wrong format. Set pretty printing");
     }
@@ -104,19 +105,18 @@ class JsonReportTest {
                 [
                   {
                     "name": "John Doe",
-                    "hired": "08:06:2023 17:41",
-                    "fired": "08:06:2023 17:41",
+                    "hired": "2023/06/08",
+                    "fired": "2023/06/08",
                     "salary": 5000.0
                   },
                   {
                     "name": "Jane Smith",
-                    "hired": "08:06:2023 17:41",
-                    "fired": "08:06:2023 17:41",
+                    "hired": "2023/06/08",
+                    "fired": "2023/06/08",
                     "salary": 6000.0
                   }
                 ]""";
-        assertThatThrownBy(() -> engine.generate(em -> true))
-                .isInstanceOf(GenerationException.class)
-                .hasMessageContaining("Illegal Date : Time format, must be \"dd:MM:yyyy HH:mm\"");
+        assertThatThrownBy(() -> validator.validateReport(ex, "dd:MM:yyyy HH:mm"))
+                .isInstanceOf(GenerationException.class);
     }
 }

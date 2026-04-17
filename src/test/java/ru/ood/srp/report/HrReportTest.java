@@ -25,6 +25,7 @@ class HrReportTest {
     private Report report;
     private Validator validator;
     private EmployeeValidator empValidator;
+    private String dateFormat;
 
     @BeforeEach
     void setUp() {
@@ -35,6 +36,7 @@ class HrReportTest {
         validator = new HrReportValidator();
         empValidator = new EmployeeValidator();
         report = new HrReport(store, validator, empValidator);
+        dateFormat = "dd:MM:yyyy HH:mm";
     }
 
     @Test
@@ -54,7 +56,7 @@ class HrReportTest {
                 .append(alex.getName()).append(" ")
                 .append(alex.getSalary())
                 .append(System.lineSeparator());
-        String res = report.generate(e -> true);
+        String res = report.generate(e -> true, dateFormat);
         assertThat(res).isEqualTo(expected.toString());
     }
 
@@ -63,7 +65,7 @@ class HrReportTest {
         store.add(alex);
         store.add(artem);
         store.add(mary);
-        assertThatThrownBy(() -> report.generate(employee -> employee.getName().equals("Andrey")))
+        assertThatThrownBy(() -> report.generate(employee -> employee.getName().equals("Andrey"), dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report by current condition");
     }
@@ -72,7 +74,7 @@ class HrReportTest {
     void whenStorageContainsNullEmployeeThenExceptionThrown() {
         store.add(artem);
         store.add(null);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report: null employee provided.");
     }
@@ -83,7 +85,7 @@ class HrReportTest {
         alex.setName("");
         store.add(alex);
         store.add(mary);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Employee must contain name.");
     }
@@ -94,7 +96,7 @@ class HrReportTest {
         alex.setFired(null);
         store.add(alex);
         store.add(mary);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " hired or fired info is missing.");
     }
@@ -104,7 +106,7 @@ class HrReportTest {
         store.add(artem);
         alex.setSalary(-1);
         store.add(alex);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }
@@ -114,7 +116,7 @@ class HrReportTest {
         store.add(artem);
         alex.setSalary(0);
         store.add(alex);
-        assertThatThrownBy(() -> report.generate(e -> true))
+        assertThatThrownBy(() -> report.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(alex.getName() + " salary cant be negative or zero.");
     }

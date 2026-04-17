@@ -23,7 +23,7 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public String generate(String answer, Predicate<Employee> filter) {
-        return reportStorage.get(Integer.parseInt(answer)).generate(filter);
+    public String generate(String answer, Predicate<Employee> filter, String dateFormat) {
+        return reportStorage.get(Integer.parseInt(answer)).generate(filter, dateFormat);
     }
 }

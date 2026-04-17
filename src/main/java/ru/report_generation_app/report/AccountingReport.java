@@ -35,7 +35,7 @@ public class AccountingReport implements Report {
     }
 
     @Override
-    public String generate(Predicate<Employee> filter) {
+    public String generate(Predicate<Employee> filter, String dateFormat) {
         StringBuilder text = new StringBuilder();
         text.append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator());
@@ -43,13 +43,13 @@ public class AccountingReport implements Report {
         empValidator.validateSearchingResult(res);
         for (Employee employee : res) {
             empValidator.validateEmployee(employee);
-            text.append(employee.getName()).append(" ")
-                    .append(parser.parse(employee.getHired())).append(" ")
-                    .append(parser.parse(employee.getFired())).append(" ")
+            text.append(employee.getName()).append(";")
+                    .append(parser.parse(employee.getHired(), dateFormat)).append(";")
+                    .append(parser.parse(employee.getFired(), dateFormat)).append(";")
                     .append(converter.convert(source, employee.getSalary(), target))
                     .append(System.lineSeparator());
         }
-        validator.validateReport(text.toString());
+        validator.validateReport(text.toString(), dateFormat);
         return text.toString();
 
     }

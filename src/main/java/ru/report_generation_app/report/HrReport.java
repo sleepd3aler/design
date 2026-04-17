@@ -20,7 +20,7 @@ public class HrReport implements Report {
     }
 
     @Override
-    public String generate(Predicate<Employee> filter) {
+    public String generate(Predicate<Employee> filter, String dateFormat) {
         StringBuilder text = new StringBuilder();
         text.append("Name; Salary;")
                 .append(System.lineSeparator());
@@ -33,7 +33,7 @@ public class HrReport implements Report {
                     .append(employee.getSalary())
                     .append(System.lineSeparator());
         }
-        validator.validateReport(text.toString());
+        validator.validateReport(text.toString(), dateFormat);
         return text.toString();
     }
 

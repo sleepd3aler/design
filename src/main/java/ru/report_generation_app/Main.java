@@ -2,13 +2,12 @@ package ru.report_generation_app;
 
 import com.google.gson.GsonBuilder;
 import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import ru.report_generation_app.adapters.JsonCalendarSerializer;
-import ru.report_generation_app.adapters.XmlCalendarAdapter;
+import ru.report_generation_app.configurations.Config;
 import ru.report_generation_app.configurations.FileConfig;
 import ru.report_generation_app.configurations.SqlConfig;
 import ru.report_generation_app.currency.Currency;
@@ -26,11 +25,6 @@ import ru.report_generation_app.validator.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        GsonBuilder gsonBuilder = getGsonBuilder();
-        FileConfig fileConfig = getConfig();
-        String dateFormat = getDateFormat(fileConfig);
-        Marshaller marshaller = getMarshaller(dateFormat);
-
         Employee first = new Employee("John Doe",
                 new GregorianCalendar(2023, Calendar.JUNE, 8, 17, 41),
                 new GregorianCalendar(2023, Calendar.JUNE, 8, 17, 41),
@@ -39,41 +33,25 @@ public class Main {
         Store store = new MemStore();
         store.add(first);
 
-        Service service = createService(dateFormat, store, marshaller, gsonBuilder);
-        Scanner scanner = new Scanner(System.in);
-        execute(scanner, service);
-    }
+        String dateFormat = "";
 
-    private static Marshaller getMarshaller(String dateFormat) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(Employees.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setAdapter(new XmlCalendarAdapter(dateFormat));
-        return marshaller;
-    }
-
-    private static String getDateFormat(FileConfig fileConfig) throws Exception {
-        String dateFormat;
-        try (SqlConfig sqlConfig = new SqlConfig(fileConfig)) {
-            dateFormat = sqlConfig.get("date_format");
-        }
-        return dateFormat;
-    }
-
-    private static FileConfig getConfig() {
-        FileConfig fileConfig = new FileConfig();
-        fileConfig.load("reports/app.properties");
-        return fileConfig;
-    }
-
-    private static GsonBuilder getGsonBuilder() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setPrettyPrinting();
-        gsonBuilder.registerTypeHierarchyAdapter(Calendar.class, new JsonCalendarSerializer());
-        return gsonBuilder;
+        gsonBuilder.registerTypeHierarchyAdapter(Calendar.class, new JsonCalendarSerializer(dateFormat));
+        FileConfig fileConfig = new FileConfig();
+        fileConfig.load("reports/app.properties");
+        try (SqlConfig sqlConfig = new SqlConfig(fileConfig)) {
+            JAXBContext context = JAXBContext.newInstance(Employees.class);
+            Service service = createService(store, gsonBuilder, context);
+            Scanner scanner = new Scanner(System.in);
+            execute(scanner, service, sqlConfig);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
-    private static Service createService(String dateFormat, Store store, Marshaller marshaller, GsonBuilder gsonBuilder) {
+    private static Service createService(Store store, GsonBuilder gsonBuilder, JAXBContext context) {
         CurrencyConverter converter = new InMemoryCurrencyConverter();
         var dateTimeParser = new ReportDateTimeParser();
         var employeeValidator = new EmployeeValidator();
@@ -81,7 +59,7 @@ public class Main {
         var hrValidator = new HrReportValidator();
         var itValidator = new ItReportValidator();
         var jsonValidator = new JsonReportValidator();
-        var xmlValidator = new XmlReportValidator(dateFormat);
+        var xmlValidator = new XmlReportValidator();
 
         Report accountReport = new AccountingReport(
                 store,
@@ -94,7 +72,7 @@ public class Main {
         Report itReport = new ItReport(store, dateTimeParser, itValidator, employeeValidator);
         Report hrReport = new HrReport(store, hrValidator, employeeValidator);
         Report jsonReport = new JsonReport(store, jsonValidator, employeeValidator, gsonBuilder);
-        Report xmlReport = new XmlReport(store, xmlValidator, employeeValidator, marshaller);
+        Report xmlReport = new XmlReport(store, xmlValidator, employeeValidator, context);
 
         Service service = new ServiceImpl();
         service.addReport(accountReport);
@@ -105,17 +83,18 @@ public class Main {
         return service;
     }
 
-    private static void execute(Scanner scanner, Service service) {
+    private static void execute(Scanner scanner, Service service, Config config) {
 
         boolean run = true;
         while (run) {
             service.showMenu();
             String answer = scanner.nextLine();
             if (!answer.equals("0")) {
-                System.out.println(service.generate(answer, employee -> true));
+                String actualFormat = config.get("date_format");
+                System.out.println(service.generate(answer, employee -> true, actualFormat));
             } else {
                 run = false;
-                System.out.println("==Программа завершена. ==");
+                System.out.println("== Программа завершена ==");
             }
         }
     }

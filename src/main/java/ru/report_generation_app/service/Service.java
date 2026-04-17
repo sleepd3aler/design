@@ -9,6 +9,6 @@ public interface Service {
 
     void showMenu();
 
-    String generate(String answer, Predicate<Employee> filter);
+    String generate(String answer, Predicate<Employee> filter, String format);
 
 }

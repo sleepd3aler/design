@@ -23,7 +23,7 @@ public class ItReport implements Report {
     }
 
     @Override
-    public String generate(Predicate<Employee> filter) {
+    public String generate(Predicate<Employee> filter, String dateFormat) {
         StringBuilder text = new StringBuilder();
         text.append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator());
@@ -32,12 +32,12 @@ public class ItReport implements Report {
         for (Employee employee : store.findBy(filter)) {
             empValidator.validateEmployee(employee);
             text.append(employee.getName()).append(",")
-                    .append(dateTimeParser.parse(employee.getHired())).append(",")
-                    .append(dateTimeParser.parse(employee.getFired())).append(",")
+                    .append(dateTimeParser.parse(employee.getHired(), dateFormat)).append(",")
+                    .append(dateTimeParser.parse(employee.getFired(), dateFormat)).append(",")
                     .append(employee.getSalary())
                     .append(System.lineSeparator());
         }
-        validator.validateReport(text.toString());
+        validator.validateReport(text.toString(), dateFormat);
         return text.toString();
     }
 

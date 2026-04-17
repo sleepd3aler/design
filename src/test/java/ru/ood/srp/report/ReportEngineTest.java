@@ -26,6 +26,7 @@ class ReportEngineTest {
     private DateTimeParser<Calendar> parser;
     private Validator validator;
     private EmployeeValidator empValidator;
+    private String dateFormat;
 
     @BeforeEach
     void setUp() {
@@ -36,6 +37,7 @@ class ReportEngineTest {
         validator = new ItReportValidator();
         empValidator = new EmployeeValidator();
         engine = new ItReport(store, parser, validator, empValidator);
+        dateFormat = "dd:MM:yyyy HH:mm";
     }
 
     @Test
@@ -45,17 +47,17 @@ class ReportEngineTest {
                 .append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator())
                 .append(worker.getName()).append(",")
-                .append(parser.parse(worker.getHired())).append(",")
-                .append(parser.parse(worker.getFired())).append(",")
+                .append(parser.parse(worker.getHired(), dateFormat)).append(",")
+                .append(parser.parse(worker.getFired(), dateFormat)).append(",")
                 .append(worker.getSalary())
                 .append(System.lineSeparator());
-        assertThat(engine.generate(employee -> true)).isEqualTo(expected.toString());
+        assertThat(engine.generate(employee -> true, dateFormat)).isEqualTo(expected.toString());
     }
 
     @Test
     void whenEmployeesDontFoundThenExceptionThrown() {
         store.add(worker);
-        assertThatThrownBy(() -> engine.generate(employee -> employee.getName().equals("Alex")))
+        assertThatThrownBy(() -> engine.generate(employee -> employee.getName().equals("Alex"), dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report by current condition");
     }
@@ -64,7 +66,7 @@ class ReportEngineTest {
     void whenStorageContainsNullEmployeeThenExceptionThrown() {
         store.add(worker);
         store.add(null);
-        assertThatThrownBy(() -> engine.generate(e -> true))
+        assertThatThrownBy(() -> engine.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Cannot generate report: null employee provided.");
     }
@@ -73,7 +75,7 @@ class ReportEngineTest {
     void whenEmployeeMissingNameThenExceptionThrown() {
         worker.setName("");
         store.add(worker);
-        assertThatThrownBy(() -> engine.generate(e -> true))
+        assertThatThrownBy(() -> engine.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining("Employee must contain name.");
     }
@@ -82,7 +84,7 @@ class ReportEngineTest {
     void whenEmployeeMissingHiredOrFiredInfoThenExceptionThrown() {
         worker.setFired(null);
         store.add(worker);
-        assertThatThrownBy(() -> engine.generate(e -> true))
+        assertThatThrownBy(() -> engine.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(worker.getName() + " hired or fired info is missing.");
     }
@@ -91,7 +93,7 @@ class ReportEngineTest {
     void whenEmployeesSalaryIsNegativeThenExceptionThrown() {
         worker.setSalary(-1);
         store.add(worker);
-        assertThatThrownBy(() -> engine.generate(e -> true))
+        assertThatThrownBy(() -> engine.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(worker.getName() + " salary cant be negative or zero.");
     }
@@ -100,7 +102,7 @@ class ReportEngineTest {
     void whenEmployeesSalaryIsZeroThenExceptionThrown() {
         worker.setSalary(0);
         store.add(worker);
-        assertThatThrownBy(() -> engine.generate(e -> true))
+        assertThatThrownBy(() -> engine.generate(e -> true, dateFormat))
                 .isInstanceOf(GenerationException.class)
                 .hasMessageContaining(worker.getName() + " salary cant be negative or zero.");
     }
