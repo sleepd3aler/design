@@ -19,4 +19,9 @@ public class FileConfig implements Config {
     public String get(String key) {
         return properties.getProperty(key);
     }
+
+    @Override
+    public void close() throws Exception {
+
+    }
 }

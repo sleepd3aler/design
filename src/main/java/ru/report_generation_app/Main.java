@@ -2,11 +2,11 @@ package ru.report_generation_app;
 
 import com.google.gson.GsonBuilder;
 import jakarta.xml.bind.JAXBContext;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import ru.report_generation_app.adapters.JsonCalendarSerializer;
+import ru.report_generation_app.configurations.CachedConfig;
 import ru.report_generation_app.configurations.Config;
 import ru.report_generation_app.configurations.FileConfig;
 import ru.report_generation_app.configurations.SqlConfig;
@@ -35,20 +35,28 @@ public class Main {
 
         String dateFormat = "";
 
+        GsonBuilder gsonBuilder = getGsonBuilderSetUp(dateFormat);
+        JAXBContext context = JAXBContext.newInstance(Employees.class);
+        try (CachedConfig cachedConfig = getCachedConfig()) {
+            Service service = createService(store, gsonBuilder, context);
+            Scanner scanner = new Scanner(System.in);
+            execute(scanner, service, cachedConfig);
+        }
+
+    }
+
+    private static GsonBuilder getGsonBuilderSetUp(String dateFormat) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setPrettyPrinting();
         gsonBuilder.registerTypeHierarchyAdapter(Calendar.class, new JsonCalendarSerializer(dateFormat));
+        return gsonBuilder;
+    }
+
+    private static CachedConfig getCachedConfig() {
         FileConfig fileConfig = new FileConfig();
         fileConfig.load("reports/app.properties");
-        try (SqlConfig sqlConfig = new SqlConfig(fileConfig)) {
-            JAXBContext context = JAXBContext.newInstance(Employees.class);
-            Service service = createService(store, gsonBuilder, context);
-            Scanner scanner = new Scanner(System.in);
-            execute(scanner, service, sqlConfig);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        SqlConfig sqlConfig = new SqlConfig(fileConfig);
+        return new CachedConfig(sqlConfig);
     }
 
     private static Service createService(Store store, GsonBuilder gsonBuilder, JAXBContext context) {
@@ -84,7 +92,6 @@ public class Main {
     }
 
     private static void execute(Scanner scanner, Service service, Config config) {
-
         boolean run = true;
         while (run) {
             service.showMenu();
