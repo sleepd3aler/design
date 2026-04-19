@@ -21,6 +21,11 @@ public class FileConfig implements Config {
     }
 
     @Override
+    public int getInterval(String string) {
+        return Integer.parseInt(properties.getProperty(string));
+    }
+
+    @Override
     public void close() throws Exception {
 
     }

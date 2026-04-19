@@ -5,6 +5,8 @@ import jakarta.xml.bind.JAXBContext;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import ru.report_generation_app.adapters.JsonCalendarSerializer;
 import ru.report_generation_app.configurations.CachedConfig;
 import ru.report_generation_app.configurations.Config;
@@ -17,13 +19,19 @@ import ru.report_generation_app.formatter.ReportDateTimeParser;
 import ru.report_generation_app.model.Employee;
 import ru.report_generation_app.model.Employees;
 import ru.report_generation_app.report.*;
+import ru.report_generation_app.schedule.FormatRefresher;
 import ru.report_generation_app.service.Service;
 import ru.report_generation_app.service.ServiceImpl;
 import ru.report_generation_app.store.MemStore;
 import ru.report_generation_app.store.Store;
 import ru.report_generation_app.validator.*;
 
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
+
 public class Main {
+
     public static void main(String[] args) throws Exception {
         Employee first = new Employee("John Doe",
                 new GregorianCalendar(2023, Calendar.JUNE, 8, 17, 41),
@@ -38,11 +46,34 @@ public class Main {
         GsonBuilder gsonBuilder = getGsonBuilderSetUp(dateFormat);
         JAXBContext context = JAXBContext.newInstance(Employees.class);
         try (CachedConfig cachedConfig = getCachedConfig()) {
+            int interval = cachedConfig.getInterval("date_format");
+            setSchedule(cachedConfig, interval);
             Service service = createService(store, gsonBuilder, context);
             Scanner scanner = new Scanner(System.in);
             execute(scanner, service, cachedConfig);
         }
 
+    }
+
+    private static void setSchedule(CachedConfig cachedConfig, int interval) throws SchedulerException {
+        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+        SimpleScheduleBuilder times = simpleSchedule()
+                .withIntervalInSeconds(interval)
+                .repeatForever();
+
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.put("Cache", cachedConfig);
+        JobDetail refreshFormat = newJob(FormatRefresher.class)
+                .setJobData(jobDataMap)
+                .build();
+
+        Trigger trigger = newTrigger()
+                .startNow()
+                .withSchedule(times)
+                .build();
+
+        scheduler.scheduleJob(refreshFormat, trigger);
+        scheduler.start();
     }
 
     private static GsonBuilder getGsonBuilderSetUp(String dateFormat) {

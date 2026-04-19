@@ -1,28 +1,35 @@
 package ru.report_generation_app.configurations;
 
-import static ru.report_generation_app.constants.Constants.QUERY_INTERVAL;
-
 public class CachedConfig implements Config, AutoCloseable {
-    private String format;
+    private String cachedFormat;
     private final Config config;
     private long lastUpdate;
 
-    public CachedConfig(Config config) {
+    public CachedConfig(SqlConfig config) {
         this.config = config;
+    }
+
+    public int getInterval(String interval) {
+        return config.getInterval(interval);
     }
 
     @Override
     public String get(String dateFormat) {
-        if (lastUpdate == 0 || System.currentTimeMillis() - lastUpdate > QUERY_INTERVAL) {
+        if (lastUpdate == 0) {
             lastUpdate = System.currentTimeMillis();
-            format = config.get(dateFormat);
-            return format;
+            cachedFormat = config.get(dateFormat);
+            return cachedFormat;
         }
-        return format;
+        return cachedFormat;
+    }
+
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
     public void close() throws Exception {
         config.close();
     }
+
 }
