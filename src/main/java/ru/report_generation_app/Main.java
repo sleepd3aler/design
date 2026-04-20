@@ -46,7 +46,7 @@ public class Main {
         GsonBuilder gsonBuilder = getGsonBuilderSetUp(dateFormat);
         JAXBContext context = JAXBContext.newInstance(Employees.class);
         try (CachedConfig cachedConfig = getCachedConfig()) {
-            int interval = cachedConfig.getInterval("date_format");
+            int interval = Integer.parseInt(cachedConfig.get("interval"));
             setSchedule(cachedConfig, interval);
             Service service = createService(store, gsonBuilder, context);
             Scanner scanner = new Scanner(System.in);

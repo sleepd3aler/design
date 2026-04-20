@@ -9,10 +9,6 @@ public class CachedConfig implements Config, AutoCloseable {
         this.config = config;
     }
 
-    public int getInterval(String interval) {
-        return config.getInterval(interval);
-    }
-
     @Override
     public String get(String dateFormat) {
         if (lastUpdate == 0) {
