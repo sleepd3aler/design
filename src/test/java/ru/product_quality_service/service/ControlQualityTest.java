@@ -84,9 +84,10 @@ class ControlQualityTest {
 
     @Test
     void whenProductExpiredOn25PercentsThenShopContainsIt() {
+        LocalDateTime now = LocalDateTime.now();
         Food food = new Food("Ramen", 690, 0,
-                LocalDateTime.of(2026, 4, 23, 15, 0),
-                LocalDateTime.of(2026, 4, 27, 15, 0));
+                now.minusDays(1),
+                now.plusDays(3));
         service.addProduct(food);
         assertThat(shop.findAll()).contains(food);
         assertThat(warehouse.findAll()).doesNotContain(food);
