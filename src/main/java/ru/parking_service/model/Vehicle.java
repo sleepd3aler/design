@@ -15,6 +15,7 @@ public abstract class Vehicle {
         this.numbers = numbers;
         this.color = color;
         this.size = size;
+        validateVehicle(size);
     }
 
     public String getModel() {
@@ -79,4 +80,6 @@ public abstract class Vehicle {
     public int hashCode() {
         return Objects.hashCode(numbers);
     }
+
+    abstract void validateVehicle(int size);
 }
