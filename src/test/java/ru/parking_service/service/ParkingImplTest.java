@@ -9,7 +9,6 @@ import ru.parking_service.model.Vehicle;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static ru.parking_service.model.Type.CAR;
 import static ru.parking_service.model.Type.TRUCK;
 
 class ParkingImplTest {
@@ -23,12 +22,12 @@ class ParkingImplTest {
 
     @BeforeEach
     void setup() {
-        car1 = new Car("Toyota", "12345", "Blue", 1, CAR);
-        car2 = new Car("Hyundai", "22345", "Black", 1, CAR);
-        car3 = new Car("Subaru", "32345", "Blue", 1, CAR);
-        truck1 = new Truck("Mercedes", "42345", "White", 2, TRUCK);
-        truck2 = new Truck("GAZ", "42345", "White", 2, TRUCK);
-        truck3 = new Truck("Monster-Truck", "42345", "White", 5, TRUCK);
+        car1 = new Car("Toyota", "12345", "Blue", 1);
+        car2 = new Car("Hyundai", "22345", "Black", 1);
+        car3 = new Car("Subaru", "32345", "Blue", 1);
+        truck1 = new Truck("Mercedes", "42345", "White", 2);
+        truck2 = new Truck("GAZ", "42345", "White", 2);
+        truck3 = new Truck("Monster-Truck", "42345", "White", 5);
         parking = new ParkingImpl(5, 5);
     }
 
@@ -60,7 +59,7 @@ class ParkingImplTest {
         assertThatThrownBy(() -> parking.placeVehicle(truck1))
                 .isInstanceOf(ParkingException.class);
         assertThatThrownBy(() -> parking.placeVehicle(
-                new Car("Blablacar", "666", "pink", 1, CAR)
+                new Car("Blablacar", "666", "pink", 1)
         ))
                 .isInstanceOf(ParkingException.class);
     }
