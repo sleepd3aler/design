@@ -37,15 +37,15 @@ class ParkingImplTest {
         parking.placeVehicle(car3);
         parking.placeVehicle(truck1);
         parking.placeVehicle(truck2);
-        assertThat(parking.getVehicleList(Truck.class)).containsOnly(truck1, truck2);
-        assertThat(parking.getVehicleList(Car.class)).containsOnly(car1, car2, car3);
+        assertThat(parking.getVehicleList(size -> size > 1)).containsOnly(truck1, truck2);
+        assertThat(parking.getVehicleList(size -> size == 1)).containsOnly(car1, car2, car3);
     }
 
     @Test
     void whenAddTruckToBusyParkingThenTruckMovedToCarListAndParkingContainsIt() {
         parking.placeVehicle(truck3);
         parking.placeVehicle(truck2);
-        assertThat(parking.getVehicleList(Truck.class)).contains(truck3, truck2);
+        assertThat(parking.getVehicleList(size -> size > 1)).contains(truck3, truck2);
     }
 
     @Test
@@ -80,7 +80,7 @@ class ParkingImplTest {
         parking.removeVehicle(car3);
         truck3.setSize(3);
         parking.placeVehicle(truck3);
-        assertThat(parking.getVehicleList(Truck.class)).containsOnly(truck3);
+        assertThat(parking.getVehicleList(size -> size > 1)).containsOnly(truck3);
     }
 
     @Test
@@ -94,6 +94,6 @@ class ParkingImplTest {
         parking.removeVehicle(car2);
         parking.removeVehicle(car3);
         parking.placeVehicle(truck3);
-        assertThat(parking.getVehicleList(Truck.class)).containsOnly(truck1, truck2, truck3);
+        assertThat(parking.getVehicleList(size -> size > 1)).containsOnly(truck1, truck2, truck3);
     }
 }
