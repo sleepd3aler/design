@@ -2,7 +2,7 @@ package ru.parking_service.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import ru.parking_service.model.Type;
 import ru.parking_service.model.Vehicle;
 
 public class ParkingImpl implements Parking {
@@ -28,7 +28,8 @@ public class ParkingImpl implements Parking {
     }
 
     @Override
-    public List<Vehicle> getVehicleList(Predicate<Integer> condition) {
+    public List<Vehicle> getVehicleList(Type type) {
         return List.of();
     }
+
 }

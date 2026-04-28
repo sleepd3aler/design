@@ -1,7 +1,7 @@
 package ru.parking_service.service;
 
 import java.util.List;
-import java.util.function.Predicate;
+import ru.parking_service.model.Type;
 import ru.parking_service.model.Vehicle;
 
 public interface Parking {
@@ -9,5 +9,5 @@ public interface Parking {
 
     Vehicle removeVehicle(Vehicle vehicle);
 
-    List<Vehicle> getVehicleList(Predicate<Integer> condition);
+    List<Vehicle> getVehicleList(Type type);
 }

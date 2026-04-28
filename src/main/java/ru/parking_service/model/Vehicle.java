@@ -9,13 +9,14 @@ public abstract class Vehicle {
     private String color;
     private int parkingPlace;
     private int size;
+    private Type type;
 
-    public Vehicle(String model, String numbers, String color, int size) {
+    public Vehicle(String model, String numbers, String color, int size, Type type) {
         this.model = model;
         this.numbers = numbers;
         this.color = color;
         this.size = size;
-        validateVehicle(size);
+        this.type = type;
     }
 
     public String getModel() {
