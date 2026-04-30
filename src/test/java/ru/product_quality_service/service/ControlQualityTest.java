@@ -31,26 +31,27 @@ class ControlQualityTest {
         shop = new Shop(25);
         warehouse = new Warehouse(25);
         trash = new Trash();
+        LocalDateTime now = LocalDateTime.now();
         // 0%
         freshProduct = new Milk("NeMoloko",
                 190, 0,
-                LocalDateTime.of(2026, 4, 23, 15, 0),
-                LocalDateTime.of(2026, 5, 3, 15, 0));
+                now.minusDays(1),
+                now.plusDays(9));
         //50%
         normalProduct = new Fish("Tuna",
                 3000, 0,
-                LocalDateTime.of(2026, 4, 19, 15, 0),
-                LocalDateTime.of(2026, 4, 29, 15, 0));
+                now.minusDays(5),
+                now.plusDays(5));
         //90%
         discountProduct = new Fish("Salmon",
                 3000, 0,
-                LocalDateTime.of(2026, 4, 15, 15, 0),
-                LocalDateTime.of(2026, 4, 25, 15, 0));
+                now.minusDays(9),
+                now.plusDays(1));
         //110%
         expiredProduct = new Meat("Ribeye",
                 190, 0,
-                LocalDateTime.of(2026, 1, 13, 15, 0),
-                LocalDateTime.of(2026, 4, 23, 15, 0));
+                now.minusDays(11),
+                now.minusDays(1));
         service.addStore(shop);
         service.addStore(warehouse);
         service.addStore(trash);
@@ -101,8 +102,8 @@ class ControlQualityTest {
         service.addProduct(expiredProduct);
         Food expected = new Fish("Salmon",
                 3000, 0,
-                LocalDateTime.of(2026, 4, 15, 15, 0),
-                LocalDateTime.of(2026, 4, 25, 15, 0));
+                discountProduct.getCreateDate(),
+                discountProduct.getExpiryDate());
         expected.setId(discountProduct.getId());
         Food res = service.findById(discountProduct.getId()).get();
         assertThat(res).isEqualTo(expected);
@@ -116,8 +117,8 @@ class ControlQualityTest {
         service.addProduct(expiredProduct);
         Food expected = new Fish("Salmon",
                 3000, 0,
-                LocalDateTime.of(2026, 4, 15, 15, 0),
-                LocalDateTime.of(2026, 4, 25, 15, 0));
+                discountProduct.getCreateDate(),
+                discountProduct.getExpiryDate());
         expected.setId(discountProduct.getId());
         Food res = service.findByName(discountProduct.getName()).get();
         assertThat(res).isEqualTo(expected);

@@ -47,16 +47,12 @@ public abstract class Vehicle {
         return parkingPlace;
     }
 
-    public void setParkingPlace(int parkingPlace) {
-        this.parkingPlace = parkingPlace;
-    }
-
     public int getSize() {
         return size;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public Type getType() {
+        return type;
     }
 
     @Override

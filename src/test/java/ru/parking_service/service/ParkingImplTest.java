@@ -9,6 +9,7 @@ import ru.parking_service.model.Vehicle;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static ru.parking_service.model.Type.CAR;
 import static ru.parking_service.model.Type.TRUCK;
 
 class ParkingImplTest {
@@ -38,8 +39,8 @@ class ParkingImplTest {
         parking.placeVehicle(car3);
         parking.placeVehicle(truck1);
         parking.placeVehicle(truck2);
+        assertThat(parking.getVehicleList(CAR)).containsOnly(car1, car2, car3);
         assertThat(parking.getVehicleList(TRUCK)).containsOnly(truck1, truck2);
-        assertThat(parking.getVehicleList(TRUCK)).containsOnly(car1, car2, car3);
     }
 
     @Test
@@ -51,12 +52,14 @@ class ParkingImplTest {
 
     @Test
     void whenAddVehicleAndParkingHaveNoSpaceThenExceptionThrown() {
+        parking = new ParkingImpl(5, 2);
         parking.placeVehicle(car1);
         parking.placeVehicle(car2);
         parking.placeVehicle(car3);
         parking.placeVehicle(truck1);
         parking.placeVehicle(truck3);
-        assertThatThrownBy(() -> parking.placeVehicle(truck1))
+        parking.placeVehicle(truck2);
+        assertThatThrownBy(() -> parking.placeVehicle(new Truck("test", "999", "grey", 2)))
                 .isInstanceOf(ParkingException.class);
         assertThatThrownBy(() -> parking.placeVehicle(
                 new Car("Blablacar", "666", "pink", 1)
@@ -76,14 +79,13 @@ class ParkingImplTest {
 
     @Test
     void whenRemoveTruckFromFullParkingThenVehiclesCanBeAdded() {
-        parking = new ParkingImpl(5, 0);
+        parking = new ParkingImpl(4, 0);
         parking.placeVehicle(car1);
         parking.placeVehicle(car2);
         parking.placeVehicle(car3);
         parking.removeVehicle(car3);
-        truck3.setSize(3);
-        parking.placeVehicle(truck3);
-        assertThat(parking.getVehicleList(TRUCK)).containsOnly(truck3);
+        parking.placeVehicle(truck2);
+        assertThat(parking.getVehicleList(TRUCK)).containsOnly(truck2);
     }
 
     @Test

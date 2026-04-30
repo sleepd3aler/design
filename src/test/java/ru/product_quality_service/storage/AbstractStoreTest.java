@@ -22,26 +22,27 @@ abstract class AbstractStoreTest {
     @BeforeEach
     void setUp() {
         store = createStore();
+        LocalDateTime now = LocalDateTime.now();
         // 0%
         freshProduct = new Milk("NeMoloko",
                 190, 0,
-                LocalDateTime.of(2026, 4, 23, 15, 0),
-                LocalDateTime.of(2026, 5, 3, 15, 0));
+                now.minusDays(1),
+                now.plusDays(9));
         //50%
         normalProduct = new Fish("Tuna",
                 3000, 0,
-                LocalDateTime.of(2026, 4, 19, 15, 0),
-                LocalDateTime.of(2026, 4, 29, 15, 0));
+                now.minusDays(5),
+                now.plusDays(5));
         //90%
         discountProduct = new Fish("Salmon",
                 3000, 0,
-                LocalDateTime.of(2026, 4, 15, 15, 0),
-                LocalDateTime.of(2026, 4, 25, 15, 0));
+                now.minusDays(9),
+                now.plusDays(1));
         //110%
         expiredProduct = new Meat("Ribeye",
                 190, 0,
-                LocalDateTime.of(2026, 1, 13, 15, 0),
-                LocalDateTime.of(2026, 4, 23, 15, 0));
+                now.minusDays(11),
+                now.minusDays(1));
     }
 
     @Test
@@ -56,8 +57,8 @@ abstract class AbstractStoreTest {
         store.addProduct(normalProduct);
         Food expected = new Fish("Tuna",
                 3000, 0,
-                LocalDateTime.of(2026, 4, 19, 15, 0),
-                LocalDateTime.of(2026, 4, 29, 15, 0));
+                normalProduct.getCreateDate(),
+                normalProduct.getExpiryDate());
         expected.setId(normalProduct.getId());
         assertThat(store.findById(normalProduct.getId()).get()).isEqualTo(expected);
     }
@@ -67,8 +68,8 @@ abstract class AbstractStoreTest {
         store.addProduct(normalProduct);
         Food expected = new Fish("Tuna",
                 3000, 0,
-                LocalDateTime.of(2026, 4, 19, 15, 0),
-                LocalDateTime.of(2026, 4, 29, 15, 0));
+                normalProduct.getCreateDate(),
+                normalProduct.getExpiryDate());
         expected.setId(normalProduct.getId());
         assertThat(store.findByName(normalProduct.getName()).get()).isEqualTo(expected);
     }
