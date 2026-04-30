@@ -1,5 +1,7 @@
 package ru.parking_service.model;
 
+import static ru.parking_service.constants.Constants.CAR_SIZE;
+
 public class Truck extends Vehicle {
 
     public Truck(String model, String numbers, String color, int size) {
@@ -9,7 +11,7 @@ public class Truck extends Vehicle {
 
     @Override
     protected void validateVehicle(int size) {
-        if (size < 2) {
+        if (size <= CAR_SIZE) {
             throw new IllegalArgumentException("Truck size must be more than 1.");
         }
     }

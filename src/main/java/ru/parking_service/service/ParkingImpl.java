@@ -8,15 +8,19 @@ import ru.parking_service.model.Vehicle;
 import static ru.parking_service.constants.Constants.*;
 
 public class ParkingImpl implements Parking {
-    private int possibleCarPlaces;
-    private int possibleTruckPlaces;
+    private final int possibleCarPlaces;
+    private final int possibleTruckPlaces;
     private int amountCars;
     private int amountTrucks;
-    private List<Vehicle> carPlaces = new ArrayList<>();
+    private final int carZoneEnd;
+    private final int truckZoneEnd;
+    private final List<Vehicle> carPlaces = new ArrayList<>();
 
     public ParkingImpl(int possibleCarPlacesPlaces, int possibleTruckPlaces) {
         this.possibleCarPlaces = possibleCarPlacesPlaces;
         this.possibleTruckPlaces = possibleTruckPlaces;
+        this.carZoneEnd = possibleCarPlacesPlaces;
+        this.truckZoneEnd = carZoneEnd + this.possibleTruckPlaces;
         setParkingPlaces();
     }
 
@@ -70,21 +74,19 @@ public class ParkingImpl implements Parking {
     }
 
     private int findFreeSpots(int size) {
-        int carZoneStart = 0;
-        int carZoneEnds = possibleCarPlaces - 1;
-        for (int i = carZoneStart; i <= carZoneEnds; i++) {
+        for (int slot = CAR_ZONE_START; slot < carZoneEnd; slot++) {
             boolean hasPlace = true;
-            if (i + size > possibleCarPlaces) {
+            if (slot + size > possibleCarPlaces) {
                 break;
             }
-            for (int j = i; j < i + size; j++) {
+            for (int j = slot; j < slot + size; j++) {
                 if (carPlaces.get(j) != null) {
                     hasPlace = false;
                     break;
                 }
             }
             if (hasPlace) {
-                return i;
+                return slot;
             }
         }
         return NOT_FOUND;
@@ -94,7 +96,7 @@ public class ParkingImpl implements Parking {
         if (!checkCarPlaces()) {
             return false;
         }
-        int freePlace = getFreeCarSlot();
+        int freePlace = getFreeSlot(CAR_ZONE_START, carZoneEnd);
         if (freePlace == NOT_FOUND) {
             return false;
         }
@@ -107,7 +109,7 @@ public class ParkingImpl implements Parking {
         if (!checkTruckPlaces()) {
             return false;
         }
-        int position = getFreeSlotForTruck();
+        int position = getFreeSlot(carZoneEnd, truckZoneEnd);
         if (position == NOT_FOUND) {
             return false;
         }
@@ -116,15 +118,13 @@ public class ParkingImpl implements Parking {
         return true;
     }
 
-    private int getFreeSlotForTruck() {
-        int truckZoneStart = possibleCarPlaces;
-        int truckZoneEnd = possibleCarPlaces + possibleTruckPlaces - 1;
-        for (int i = truckZoneStart; i <= truckZoneEnd; i++) {
+    private  int getFreeSlot(int start, int end) {
+        for (int i = start; i < end; i++) {
             if (carPlaces.get(i) == null) {
                 return i;
             }
         }
-        return NOT_FOUND;
+        return  NOT_FOUND;
     }
 
     private boolean checkTruckPlaces() {
@@ -133,16 +133,6 @@ public class ParkingImpl implements Parking {
 
     private boolean checkCarPlaces() {
         return amountCars < possibleCarPlaces;
-    }
-
-    private int getFreeCarSlot() {
-        int carZoneEnd = possibleCarPlaces;
-        for (int i = 0; i < carZoneEnd; i++) {
-            if (carPlaces.get(i) == null) {
-                return i;
-            }
-        }
-        return NOT_FOUND;
     }
 
     private void setParkingPlaces() {
