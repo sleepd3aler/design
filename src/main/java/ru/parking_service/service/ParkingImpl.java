@@ -5,6 +5,7 @@ import java.util.List;
 import ru.parking_service.exceptions.ParkingException;
 import ru.parking_service.model.Type;
 import ru.parking_service.model.Vehicle;
+
 import static ru.parking_service.constants.Constants.*;
 
 public class ParkingImpl implements Parking {
@@ -93,38 +94,37 @@ public class ParkingImpl implements Parking {
     }
 
     private boolean placeCar(Vehicle vehicle) {
-        if (!checkCarPlaces()) {
-            return false;
+        if (checkCarPlaces() && placedInZone(vehicle, CAR_ZONE_START, carZoneEnd)) {
+            amountCars++;
+            return true;
         }
-        int freePlace = getFreeSlot(CAR_ZONE_START, carZoneEnd);
-        if (freePlace == NOT_FOUND) {
-            return false;
+        return false;
+    }
+
+    private boolean placedInZone(Vehicle vehicle, int start, int end) {
+        int freePlace = getFreeSlot(start, end);
+        if (freePlace != NOT_FOUND) {
+            carPlaces.set(freePlace, vehicle);
+            return true;
         }
-        carPlaces.set(freePlace, vehicle);
-        amountCars++;
-        return true;
+        return false;
     }
 
     private boolean placeTruck(Vehicle vehicle) {
-        if (!checkTruckPlaces()) {
-            return false;
+        if (checkTruckPlaces() && placedInZone(vehicle, carZoneEnd, truckZoneEnd)) {
+            amountTrucks++;
+            return true;
         }
-        int position = getFreeSlot(carZoneEnd, truckZoneEnd);
-        if (position == NOT_FOUND) {
-            return false;
-        }
-        carPlaces.set(position, vehicle);
-        amountTrucks++;
-        return true;
+        return false;
     }
 
-    private  int getFreeSlot(int start, int end) {
+    private int getFreeSlot(int start, int end) {
         for (int i = start; i < end; i++) {
             if (carPlaces.get(i) == null) {
                 return i;
             }
         }
-        return  NOT_FOUND;
+        return NOT_FOUND;
     }
 
     private boolean checkTruckPlaces() {
