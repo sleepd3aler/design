@@ -60,11 +60,13 @@ class ParkingImplTest {
         parking.placeVehicle(truck3);
         parking.placeVehicle(truck2);
         assertThatThrownBy(() -> parking.placeVehicle(new Truck("test", "999", "grey", 2)))
-                .isInstanceOf(ParkingException.class);
+                .isInstanceOf(ParkingException.class)
+                .hasMessageContaining("No more space for : " + TRUCK + " with numbers: 999");
         assertThatThrownBy(() -> parking.placeVehicle(
                 new Car("Blablacar", "666", "pink", 1)
         ))
-                .isInstanceOf(ParkingException.class);
+                .isInstanceOf(ParkingException.class)
+                .hasMessageContaining("No more space for : " + CAR + " with numbers: 666");
     }
 
     @Test
