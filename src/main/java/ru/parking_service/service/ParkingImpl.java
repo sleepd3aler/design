@@ -27,15 +27,32 @@ public class ParkingImpl implements Parking {
 
     @Override
     public void placeVehicle(Vehicle vehicle) {
-        boolean placed;
+        boolean placed = false;
         if (vehicle.getSize() == CAR_SIZE) {
-            placed = placeCar(vehicle);
+            if (checkCarPlaces() && placedInZone(vehicle, CAR_ZONE_START, carZoneEnd)) {
+                amountCars++;
+                placed = true;
+            }
         } else {
-            placed = placeTruck(vehicle) || placeTruckToCarZone(vehicle);
+            if (checkTruckPlaces() && placedInZone(vehicle, carZoneEnd, truckZoneEnd)) {
+                amountTrucks++;
+                placed = true;
+            } else if (placeTruckToCarZone(vehicle)) {
+                placed = true;
+            }
         }
         if (!placed) {
             throw new ParkingException();
         }
+    }
+
+    private boolean placedInZone(Vehicle vehicle, int start, int end) {
+        int freePlace = getFreeSlot(start, end);
+        if (freePlace != NOT_FOUND) {
+            carPlaces.set(freePlace, vehicle);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -56,10 +73,7 @@ public class ParkingImpl implements Parking {
     @Override
     public List<Vehicle> getVehicleList(Type type) {
         List<Vehicle> result = new ArrayList<>();
-        carPlaces.stream()
-                .filter(vehicle -> vehicle != null && vehicle.getType().equals(type))
-                .distinct()
-                .forEach(result::add);
+        carPlaces.stream().filter(vehicle -> vehicle != null && vehicle.getType().equals(type)).distinct().forEach(result::add);
         return result;
     }
 
@@ -91,31 +105,6 @@ public class ParkingImpl implements Parking {
             }
         }
         return NOT_FOUND;
-    }
-
-    private boolean placeCar(Vehicle vehicle) {
-        if (checkCarPlaces() && placedInZone(vehicle, CAR_ZONE_START, carZoneEnd)) {
-            amountCars++;
-            return true;
-        }
-        return false;
-    }
-
-    private boolean placedInZone(Vehicle vehicle, int start, int end) {
-        int freePlace = getFreeSlot(start, end);
-        if (freePlace != NOT_FOUND) {
-            carPlaces.set(freePlace, vehicle);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean placeTruck(Vehicle vehicle) {
-        if (checkTruckPlaces() && placedInZone(vehicle, carZoneEnd, truckZoneEnd)) {
-            amountTrucks++;
-            return true;
-        }
-        return false;
     }
 
     private int getFreeSlot(int start, int end) {
