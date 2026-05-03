@@ -1,5 +1,5 @@
 package ru.isp.device_system;
 
-public interface Playable {
+public interface Playable extends Device {
     void play();
 }
