@@ -13,16 +13,13 @@ public class FileReportRepository {
         this.file = file;
     }
 
-    public void saveOrder(String customer, double amount) {
+    public int saveOrder(String customer, double amount) {
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(file, true))) {
             String ln = System.lineSeparator();
             writer.printf("Order #%d: %s, %.2f%s", ids++, customer, amount, ln);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public int getLastOrderId() {
         return ids;
     }
 }

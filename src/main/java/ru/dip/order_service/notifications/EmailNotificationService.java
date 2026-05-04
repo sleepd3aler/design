@@ -1,9 +1,7 @@
-package ru.dip.order_service.services;
+package ru.dip.order_service.notifications;
 
 public class EmailNotificationService {
-
-    void sendEmail(int id) {
+    public void sendEmail(int id) {
         System.out.printf("Order #%d created %n ", id);
     }
-
 }
