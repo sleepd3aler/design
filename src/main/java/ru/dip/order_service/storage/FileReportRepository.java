@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import ru.dip.order_service.model.Order;
 
 public class FileReportRepository implements Repository {
     private int ids = 1;
@@ -14,10 +15,10 @@ public class FileReportRepository implements Repository {
     }
 
     @Override
-    public int saveOrder(String customer, double amount) {
+    public int saveOrder(Order order) {
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(file, true))) {
             String ln = System.lineSeparator();
-            writer.printf("Order #%d: %s, %.2f%s", ids, customer, amount, ln);
+            writer.printf("Order #%d: %s, %.2f%s", ids, order.customer(), order.amount(), ln);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
