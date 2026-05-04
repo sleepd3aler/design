@@ -8,7 +8,7 @@ public class OrderService {
     private FileReportRepository fileReportRepository = new FileReportRepository(new File("./orders.txt"));
     private EmailNotificationService emailNotificationService = new EmailNotificationService();
 
-    void placeOrder(String customer, double amount) {
+    public void placeOrder(String customer, double amount) {
         emailNotificationService.sendEmail(fileReportRepository.saveOrder(customer, amount));
     }
 }
