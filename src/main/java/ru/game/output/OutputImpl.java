@@ -1,31 +1,26 @@
 package ru.game.output;
 
 import java.util.List;
+import ru.game.formatters.FieldFormatter;
 import ru.game.validator.Validator;
 
 public class OutputImpl implements Output {
     private Validator validator;
+    private FieldFormatter formatter;
 
-    public OutputImpl(Validator validator) {
+    public OutputImpl(Validator validator, FieldFormatter formatter) {
         this.validator = validator;
+        this.formatter = formatter;
     }
 
     @Override
     public void showField(List<Character> field) {
         validator.validateField(field);
-        System.out.println(generateField(field));
+        System.out.println(formatter.generateField(field));
     }
 
-    private String generateField(List<Character> field) {
-        StringBuilder fieldBuilder = new StringBuilder();
-        fieldBuilder.append(" ___".repeat(3)).append("\n");
-        for (int i = 0; i < field.size(); i++) {
-            fieldBuilder.append("|").append(" ").append(field.get(i)).append(" ");
-            if ((i + 1) % 3 == 0) {
-                fieldBuilder.append("|").append("\n");
-            }
-        }
-        fieldBuilder.append(" ‾‾‾".repeat(3));
-        return fieldBuilder.toString();
+    @Override
+    public void printMsg(String message) {
+        System.out.println(message);
     }
 }

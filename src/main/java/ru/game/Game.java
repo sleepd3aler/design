@@ -1,11 +1,11 @@
 package ru.game;
 
-import java.util.List;
+import ru.game.field.Field;
 
 public interface Game {
     void start();
 
     void showField();
 
-    boolean checkWinner(List<Character> field, char sign);
+    boolean checkWinner(Field field, char sign);
 }
