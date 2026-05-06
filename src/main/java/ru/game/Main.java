@@ -25,10 +25,10 @@ public class Main {
         Validator validator = new ValidatorImpl();
         Rules rules = new SimpleRule();
         Input in = new InputImpl(validator, new Scanner(System.in));
-        Output out = new OutputImpl(validator, new FieldFormatter());
-        Player first = new PlayerImpl('X', in);
-        Player second = new PlayerImpl('O', in);
+        Output out = new OutputImpl(new FieldFormatter());
+        Player first = new PlayerImpl('X');
+        Player second = new PlayerImpl('O');
         Field field = new FieldImpl();
-        return new GameMaster(rules, first, second, field, out, validator);
+        return new GameMaster(rules, first, second, field, in, out, validator);
     }
 }

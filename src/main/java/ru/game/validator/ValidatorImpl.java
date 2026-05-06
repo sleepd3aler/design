@@ -1,6 +1,7 @@
 package ru.game.validator;
 
 import java.util.List;
+import ru.game.field.Field;
 
 public class ValidatorImpl implements Validator {
     @Override
@@ -22,11 +23,12 @@ public class ValidatorImpl implements Validator {
     }
 
     @Override
-    public void validateField(List<Character> field) {
-        if (field.size() != 9) {
+    public void validateField(Field field) {
+        List<Character> current = field.getField();
+        if (current.size() != 9) {
             throw new IllegalArgumentException("Field might contain only [9] positions");
         }
-        for (Character position : field) {
+        for (Character position : current) {
             if (!(position.equals('X') || position.equals('O') || position.equals(' '))) {
                 throw new IllegalArgumentException("Field might contain only : X, O, or backspace.");
             }
@@ -34,8 +36,9 @@ public class ValidatorImpl implements Validator {
     }
 
     @Override
-    public void validateMove(List<Character> field, int position) {
-        if (!field.get(position - 1).equals(' ')) {
+    public void validateMove(Field field, int position) {
+        List<Character> current = field.getField();
+        if (!current.get(position - 1).equals(' ')) {
             throw new IllegalArgumentException("Current position is busy!");
         }
     }

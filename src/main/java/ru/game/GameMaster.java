@@ -1,7 +1,7 @@
 package ru.game;
 
-import java.util.List;
 import ru.game.field.Field;
+import ru.game.input.Input;
 import ru.game.model.Player;
 import ru.game.output.Output;
 import ru.game.rules.Rules;
@@ -12,14 +12,16 @@ public class GameMaster implements Game {
     private Player first;
     private Player second;
     private Field field;
+    private Input input;
     private Output output;
     private Validator validator;
 
-    public GameMaster(Rules rules, Player first, Player second, Field field, Output output, Validator validator) {
+    public GameMaster(Rules rules, Player first, Player second, Field field, Input input, Output output, Validator validator) {
         this.rules = rules;
         this.first = first;
         this.second = second;
         this.field = field;
+        this.input = input;
         this.output = output;
         this.validator = validator;
     }
@@ -31,7 +33,8 @@ public class GameMaster implements Game {
         while (run) {
             output.printMsg("First player`s turn!");
             output.printMsg("Enter position in [1 - 9]");
-            makeMove(field, first, first.getSign());
+            makeMove(field, first.getSign());
+            validator.validateField(field);
             showField();
             run = checkWinner(field, first.getSign());
             if (!run) {
@@ -39,7 +42,8 @@ public class GameMaster implements Game {
             }
             output.printMsg("Second player`s turn!");
             output.printMsg("Enter position in [1 - 9]");
-            makeMove(field, second, second.getSign());
+            makeMove(field, second.getSign());
+            validator.validateField(field);
             showField();
             run = checkWinner(field, second.getSign());
         }
@@ -71,12 +75,13 @@ public class GameMaster implements Game {
         return true;
     }
 
-    private void makeMove(Field field, Player player, char sign) {
-        List<Character> currentField = field.getField();
+    private void makeMove(Field field, char sign) {
         while (true) {
             try {
-                int slot = player.makeMove();
-                validator.validateMove(currentField, slot);
+                String in = input.readInput();
+                validator.validateInput(in);
+                int slot = Integer.parseInt(in);
+                validator.validateMove(field, slot);
                 field.placeSign(slot, sign);
                 break;
             } catch (IllegalArgumentException e) {

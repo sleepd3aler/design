@@ -1,11 +1,11 @@
 package ru.game.validator;
 
-import java.util.List;
+import ru.game.field.Field;
 
 public interface Validator {
     void validateInput(String input);
 
-    void validateField(List<Character> field);
+    void validateField(Field field);
 
-    void validateMove(List<Character> field, int position);
+    void validateMove(Field field, int position);
 }
