@@ -45,8 +45,14 @@ class TwoSumTest {
     @Test
     void whenTargetIs3First2Second1ThenExpectedResult() {
         int[] nums = {3, 2, 5, 1, 5};
-        int[]expected = {1, 3};
+        int[] expected = {1, 3};
         assertThat(twoSum(nums, 3)).isEqualTo(expected);
+    }
+
+    @Test
+    void whenTargetNotFoundThenResultIsNull() {
+        int[] nums = {4, 2, 5, 1, 3};
+        assertThat(twoSum(nums, 2)).isEqualTo(null);
     }
 
 }
