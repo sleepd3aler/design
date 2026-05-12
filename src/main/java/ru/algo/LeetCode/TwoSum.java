@@ -1,24 +1,48 @@
 package ru.algo.LeetCode;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TwoSum {
     public static int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> neededNums = new HashMap<>();
-        int[] res = new int[2];
+        List<Node<Integer>> copy = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            copy.add(new Node<>(nums[i], i));
+        }
+        copy.sort(Comparator.comparing(Node::getValue));
         int left = 0;
-        while (left < nums.length) {
-            int needed = target - nums[left];
-            if (neededNums.get(needed) != null) {
-                res[0] = neededNums.get(needed);
-                res[1] = left;
-                return res;
-            } else {
-                neededNums.put(nums[left], left);
+        int right = nums.length - 1;
+        while (left < right) {
+            int sum = copy.get(left).getValue() + copy.get(right).getValue();
+            if (sum == target) {
+                int first = copy.get(left).getIndex();
+                int second = copy.get(right).getIndex();
+                return new int[]{Math.min(first, second), Math.max(first, second)};
             }
-            left++;
+            if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
         }
         return null;
+    }
+
+    private static class Node<T> {
+        T value;
+
+        T index;
+
+        public Node(T value, T index) {
+            this.value = value;
+            this.index = index;
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public T getIndex() {
+            return index;
+        }
     }
 }
