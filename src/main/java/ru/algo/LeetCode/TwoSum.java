@@ -27,6 +27,19 @@ public class TwoSum {
         return null;
     }
 
+    public static int[] mapTwoSum(int[] nums, int target) {
+        Map<Integer, Integer> neededNums = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int needed = target - nums[i];
+            if (neededNums.get(needed) != null) {
+                return new int[] { neededNums.get(needed), i};
+            } else {
+                neededNums.put(nums[i], i);
+            }
+        }
+        return null;
+    }
+
     private static class Node<T> {
         T value;
 
