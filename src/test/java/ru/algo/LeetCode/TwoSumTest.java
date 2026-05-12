@@ -11,55 +11,63 @@ class TwoSumTest {
     void whenFirstTwoNumsAreEqualsTargetThenExpectedRes() {
         int[] nums = {2, 7, 11, 15};
         int[] expected = {0, 1};
-        assertThat(twoSum(nums, 9)).isEqualTo(expected);
+        assertThat(simpleTwoSum(nums, 9)).isEqualTo(expected);
         assertThat(mapTwoSum(nums, 9)).isEqualTo(expected);
+        assertThat(comparedTwoSum(nums, 9)).isEqualTo(expected);
     }
 
     @Test
     void whenLastTwoNumsAreEqualsTargetThenExpectedRes() {
         int[] nums = {3, 2, 4};
         int[] expected = {1, 2};
-        assertThat(twoSum(nums, 6)).isEqualTo(expected);
+        assertThat(simpleTwoSum(nums, 6)).isEqualTo(expected);
         assertThat(mapTwoSum(nums, 6)).isEqualTo(expected);
+        assertThat(comparedTwoSum(nums, 6)).isEqualTo(expected);
     }
 
     @Test
     void whenNumsContainsOnly2NumsAndTheyEqualsTargetThenExpectedRes() {
         int[] nums = {3, 3};
         int[] expected = {0, 1};
-        assertThat(TwoSum.twoSum(nums, 6)).isEqualTo(expected);
+        assertThat(TwoSum.simpleTwoSum(nums, 6)).isEqualTo(expected);
         assertThat(mapTwoSum(nums, 6)).isEqualTo(expected);
+        assertThat(comparedTwoSum(nums, 6)).isEqualTo(expected);
     }
 
     @Test
     void whenTargetIs3andSecondIs1andFourthIs2ThenExpectedResult() {
         int[] nums = {3, 1, 5, 2, 5};
         int[] expected = {1, 3};
-        assertThat(twoSum(nums, 3)).isEqualTo(expected);
+        assertThat(simpleTwoSum(nums, 3)).isEqualTo(expected);
         assertThat(mapTwoSum(nums, 3)).isEqualTo(expected);
+        assertThat(comparedTwoSum(nums, 3)).isEqualTo(expected);
     }
 
     @Test
     void whenTargetIs6andFirst1Second5ThenExpectedResult() {
         int[] nums = {1, 2, 3, 7, 5};
         int[] expected = {0, 4};
-        assertThat(twoSum(nums, 6)).isEqualTo(expected);
+        assertThat(simpleTwoSum(nums, 6)).isEqualTo(expected);
         assertThat(mapTwoSum(nums, 6)).isEqualTo(expected);
+        assertThat(comparedTwoSum(nums, 6)).isEqualTo(expected);
     }
 
     @Test
     void whenTargetIs3First2Second1ThenExpectedResult() {
         int[] nums = {3, 2, 5, 1, 5};
         int[] expected = {1, 3};
-        assertThat(twoSum(nums, 3)).isEqualTo(expected);
+        assertThat(simpleTwoSum(nums, 3)).isEqualTo(expected);
         assertThat(mapTwoSum(nums, 3)).isEqualTo(expected);
+        assertThat(comparedTwoSum(nums, 3)).isEqualTo(expected);
+
     }
 
     @Test
     void whenTargetNotFoundThenResultIsNull() {
         int[] nums = {4, 2, 5, 1, 3};
-        assertThat(twoSum(nums, 2)).isEqualTo(null);
+        assertThat(simpleTwoSum(nums, 2)).isEqualTo(null);
         assertThat(mapTwoSum(nums, 2)).isEqualTo(null);
+        assertThat(comparedTwoSum(nums, 2)).isEqualTo(null);
     }
 
 }
