@@ -35,24 +35,15 @@ public class RomanToInteger {
         // MCMXCIV
         initRomanianTable();
         romanian = s.toCharArray();
+        int right = 0;
         for (int i = romanian.length - 1; i >= 0; i--) {
             int first = convertToArabian(romanian[i]);
-            if (i == 0) {
-                sum += first;
-                break;
-            }
-            int next = i - 1;
-            int second = convertToArabian(romanian[next]);
-            if (first < second) {
+            if (first < right) {
+                sum -= first;
+            } else {
                 sum += first;
             }
-            if (first == second) {
-                sum += first;
-            }
-            if (first > second) {
-                sum += first - next;
-                i--;
-            }
+            right = first;
         }
         return sum;
     }
@@ -72,7 +63,7 @@ public class RomanToInteger {
     }
 
     public static void main(String[] args) {
-        int res = romanToInt("III");
+        int res = romanToInt("MCMXCIV");
         int res2 = romanToInteger("MCMXCIV");
         System.out.println(res2);
         System.out.println(res);
