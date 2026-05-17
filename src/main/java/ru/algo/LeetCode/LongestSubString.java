@@ -13,13 +13,12 @@ import java.util.Set;
 public class LongestSubString {
     public static int lengthOfLongestSubstring(String s) {
         Set<Character> chars = new HashSet<>();
-        char[] string = s.toCharArray();
         int max = 0;
-        for (int start = 0; start < string.length; start++) {
-            char current = string[start];
+        for (int start = 0; start < s.length(); start++) {
+            char current = s.charAt(start);
             chars.add(current);
-            for (int end = start + 1; end < string.length; end++) {
-                char next = string[end];
+            for (int end = start + 1; end < s.length(); end++) {
+                char next = s.charAt(end);
                 if (chars.contains(next)) {
                     max = Math.max(max, end - start);
                     break;
@@ -33,6 +32,6 @@ public class LongestSubString {
     }
 
     public static void main(String[] args) {
-        System.out.println(lengthOfLongestSubstring("bbbb"));
+        System.out.println(lengthOfLongestSubstring("abcabcbb"));
     }
 }
