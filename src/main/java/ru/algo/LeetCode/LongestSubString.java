@@ -14,13 +14,11 @@ public class LongestSubString {
     public static int lengthOfLongestSubstring(String s) {
         Set<Character> chars = new HashSet<>();
         char[] string = s.toCharArray();
-        int start = 0;
-        int end = 1;
         int max = 0;
-        while (start < string.length) {
+        for (int start = 0; start < string.length; start++) {
             char current = string[start];
             chars.add(current);
-            while (end < string.length) {
+            for (int end = start + 1; end < string.length; end++) {
                 char next = string[end];
                 if (chars.contains(next)) {
                     max = Math.max(max, end - start);
@@ -28,16 +26,13 @@ public class LongestSubString {
                 } else {
                     chars.add(next);
                 }
-                end++;
             }
             chars.clear();
-            start++;
-            end = start + 1;
         }
         return max;
     }
 
     public static void main(String[] args) {
-        System.out.println(lengthOfLongestSubstring("pwwkew"));
+        System.out.println(lengthOfLongestSubstring("bbbb"));
     }
 }
