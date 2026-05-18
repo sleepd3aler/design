@@ -19,19 +19,20 @@ public class LongestSubString {
             chars.add(current);
             for (int end = start + 1; end < s.length(); end++) {
                 char next = s.charAt(end);
+                max = Math.max(max, 1);
                 if (chars.contains(next)) {
-                    max = Math.max(max, end - start);
                     break;
                 } else {
                     chars.add(next);
+                    max = Math.max(max, end - start + 1);
                 }
             }
-            chars.clear();
+            chars = new HashSet<>();
         }
         return max;
     }
 
     public static void main(String[] args) {
-        System.out.println(lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(lengthOfLongestSubstring("pwwkew"));
     }
 }
