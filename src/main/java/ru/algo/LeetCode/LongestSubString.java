@@ -12,27 +12,23 @@ import java.util.Set;
 
 public class LongestSubString {
     public static int lengthOfLongestSubstring(String s) {
-        Set<Character> chars = new HashSet<>();
         int max = 0;
         for (int start = 0; start < s.length(); start++) {
-            char current = s.charAt(start);
-            chars.add(current);
-            for (int end = start + 1; end < s.length(); end++) {
-                char next = s.charAt(end);
-                max = Math.max(max, 1);
-                if (chars.contains(next)) {
+            Set<Character> chars = new HashSet<>();
+            for (int end = start; end < s.length(); end++) {
+                char current = s.charAt(end);
+                if (chars.contains(current)) {
                     break;
                 } else {
-                    chars.add(next);
+                    chars.add(current);
                     max = Math.max(max, end - start + 1);
                 }
             }
-            chars = new HashSet<>();
         }
         return max;
     }
 
     public static void main(String[] args) {
-        System.out.println(lengthOfLongestSubstring("pwwkew"));
+        System.out.println(lengthOfLongestSubstring("bbbb"));
     }
 }
