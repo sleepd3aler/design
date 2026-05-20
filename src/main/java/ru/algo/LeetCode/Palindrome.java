@@ -8,11 +8,11 @@ public class Palindrome {
         while (left < right) {
             char first = s.charAt(left);
             char second = s.charAt(right);
-            if (!Character.isLetter(first)) {
+            if (!Character.isLetterOrDigit(first)) {
                 left++;
                 continue;
             }
-            if (!Character.isLetter(second)) {
+            if (!Character.isLetterOrDigit(second)) {
                 right--;
                 continue;
             }
