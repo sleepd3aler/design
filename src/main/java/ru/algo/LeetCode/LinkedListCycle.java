@@ -10,9 +10,8 @@ public class LinkedListCycle {
         set.add(head);
         ListNode next = head.next;
         while (next != null) {
-            set.add(next);
             next = next.next;
-            if (set.contains(next)) {
+            if (!set.add(next)) {
                 return true;
             }
         }
