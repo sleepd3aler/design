@@ -1,19 +1,18 @@
 package ru.algo.LeetCode;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LinkedListCycle {
     // 3 -> 2 -> 0 -> -4 = true
     public static boolean hasCycle(ListNode head) {
-        int pos = 0;
-        Map<ListNode, Integer> nodeMap = new HashMap<>();
-        nodeMap.put(head, pos++);
+        Set<ListNode> set = new HashSet<>();
+        set.add(head);
         ListNode next = head.next;
         while (next != null) {
-            nodeMap.put(next, pos++);
+            set.add(next);
             next = next.next;
-            if (nodeMap.containsKey(next)) {
+            if (set.contains(next)) {
                 return true;
             }
         }
