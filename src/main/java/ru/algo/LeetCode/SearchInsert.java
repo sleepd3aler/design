@@ -8,12 +8,12 @@ public class SearchInsert {
             start = 0;
         }
         for (int i = start; i < nums.length; i++) {
-        if (target == nums[i]) {
-            return i;
-        }
-        if (target < nums[i]) {
-            return i;
-        }
+            if (target == nums[i]) {
+                return i;
+            }
+            if (target < nums[i]) {
+                return i;
+            }
 
         }
         return nums.length;
