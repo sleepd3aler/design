@@ -1,20 +1,23 @@
 package ru.algo.LeetCode;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 
 public class MissingNumber {
     public static int missingNumber(int[] nums) {
-        Set<Integer> set = new HashSet<>();
-        for (int num : nums) {
-            set.add(num);
-        }
-        for (int i = 0; i <= nums.length; i++) {
-            if (set.add(i)) {
-                return i;
+        Arrays.sort(nums);
+        int start = 0;
+        int end = nums.length;
+        int mid = (end + start) / 2;
+        while (start < end) {
+            if (nums[mid] == mid) {
+                start = mid + 1;
+            } else {
+                end = mid;
             }
+
+            mid = (end + start) / 2;
         }
-        return 0;
+        return start;
     }
 
     public static void main(String[] args) {
