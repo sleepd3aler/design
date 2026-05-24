@@ -2,21 +2,22 @@ package ru.algo.LeetCode;
 
 public class SearchInsert {
     public static int searchInsert(int[] nums, int target) {
-        int start = nums.length / 2 - 1;
-        int mid = nums[start];
-        if (target < mid) {
-            start = 0;
-        }
-        for (int i = start; i < nums.length; i++) {
-            if (target == nums[i]) {
-                return i;
+        int left = 0;
+        int right = nums.length;
+        int mid = (left + right) / 2;
+        int res = 0;
+        while (left < right) {
+            if (target <= nums[mid]) {
+                right = mid;
+                res = right;
             }
-            if (target < nums[i]) {
-                return i;
+            if (target > nums[mid]) {
+                left = mid + 1;
+                res = left;
             }
-
+            mid = (left + right) / 2;
         }
-        return nums.length;
+        return res;
     }
 
     public static void main(String[] args) {
