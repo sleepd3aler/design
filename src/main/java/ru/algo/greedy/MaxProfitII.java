@@ -16,8 +16,6 @@ public class MaxProfitII {
 
     public static void main(String[] args) {
         System.out.println(maxProfit(new int[]{1, 3, 2, 8, 4, 9}, 2));
-        //3 - 1 - 2 = 0
-        //
     }
 
 }
