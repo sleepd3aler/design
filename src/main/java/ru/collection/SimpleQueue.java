@@ -22,4 +22,8 @@ public class SimpleQueue<T> {
         input.push(value);
     }
 
+    public boolean isEmpty() {
+        return input.isEmpty() && output.isEmpty();
+    }
+
 }
