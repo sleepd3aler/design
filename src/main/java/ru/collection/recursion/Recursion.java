@@ -1,5 +1,8 @@
 package ru.collection.recursion;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Recursion {
     public int loop(int summary, int index) {
         for (int i = index; i > 0; i--) {
@@ -55,31 +58,39 @@ public class Recursion {
         return res;
     }
 
-    public long fibonacciRecursion(int n) {
+    public long fibonacciRecursion(int n, Map<Integer, Long> map) {
+
         if (n == 0) {
             return 0;
         }
         if (n == 1) {
             return 1;
         }
-        long f1 = fibonacciRecursion(n - 1);
-        long f2 = fibonacciRecursion(n - 2);
-        return f1 + f2;
+        if (map.containsKey(n)) {
+            return map.get(n);
+        }
+        long res = fibonacciRecursion(n - 1, map) + fibonacciRecursion(n - 2, map);
+        map.put(n, res);
+        return res;
     }
 
     public static void main(String[] args) {
         Recursion recursion = new Recursion();
-        int resultLoop = recursion.loop(10, 5);
-        int resultRec = recursion.sum(10, 5);
-        System.out.println("result  of loop = " + resultLoop);
-        System.out.println("result  of recursion = " + resultRec);
-        int factorialLoop = (int) recursion.factorialLoop(6);
-        System.out.println("factorial loop : " + factorialLoop);
-        int factorialRec = (int) recursion.factorialRecursion(6);
-        System.out.println("factorial rec : " + factorialRec);
-        int fibLoop = (int) recursion.fibonacciLoop(7);
+//        int resultLoop = recursion.loop(10, 5);
+//        int resultRec = recursion.sum(10, 5);
+//        System.out.println("result  of loop = " + resultLoop);
+//        System.out.println("result  of recursion = " + resultRec);
+//        int factorialLoop = (int) recursion.factorialLoop(6);
+//        System.out.println("factorial loop : " + factorialLoop);
+//        int factorialRec = (int) recursion.factorialRecursion(6);
+//        System.out.println("factorial rec : " + factorialRec);
+
+        System.out.println("Start of Loop: " + System.currentTimeMillis() / 1000.0);
+        long fibLoop = recursion.fibonacciLoop(100);
         System.out.println("Fibonacci loop : " + fibLoop);
-        int fibRec = (int) recursion.fibonacciRecursion(7);
+        System.out.println("End of Loop: " + System.currentTimeMillis() / 1000.0);
+        long fibRec = recursion.fibonacciRecursion(100, new HashMap<>());
         System.out.println("Fibonacci rec : " + fibRec);
+        System.out.println("End of Loop: " + System.currentTimeMillis() / 1000.0);
     }
 }
