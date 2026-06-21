@@ -39,7 +39,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public boolean contains(T key) {
-
         return find(root, key) != null;
     }
 
@@ -52,18 +51,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
             return current;
         }
         if (key.compareTo(current.key) < 0) {
-                current = current.left;
-                return find(current, key);
+            current = current.left;
+            return find(current, key);
         }
         if (key.compareTo(current.key) > 0) {
-                current = current.right;
-                return find(current, key);
+            current = current.right;
+            return find(current, key);
         }
         return null;
     }
 
     public boolean remove(T key) {
-        /* Метод будет реализован в следующих уроках */
         return false;
     }
 
@@ -71,6 +69,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         List<T> result = new ArrayList<>();
         Node node = root;
         return inSymmetricalOrder(node, result);
+
     }
 
     private List<T> inSymmetricalOrder(Node localRoot, List<T> list) {
@@ -93,7 +92,6 @@ public class BinarySearchTree<T extends Comparable<T>> {
             list.add(localRoot.key);
             inPreOrder(localRoot.left, list);
             inPreOrder(localRoot.right, list);
-
         }
         return list;
     }
